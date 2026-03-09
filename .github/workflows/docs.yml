@@ -1,0 +1,78 @@
+# ============================================================
+# GitHub Actions Workflow: Deploy documentation
+#
+# This workflow builds the project documentation using
+# Jupyter Book and deploys the generated HTML pages to
+# GitHub Pages.
+#
+# Trigger:
+#   - Runs automatically when files under docs/** are pushed
+#     to the main branch.
+#
+# Workflow steps:
+#   1. Checkout repository source code.
+#   2. Set up Python environment.
+#   3. Install documentation dependencies.
+#   4. Synchronize required static files.
+#   5. Build documentation with Jupyter Book.
+#   6. Upload generated HTML as a GitHub Pages artifact.
+#   7. Deploy the artifact to GitHub Pages.
+#
+# The deployed documentation will be available at:
+#   https://race-autoconfig.github.io/crace/
+#
+# ============================================================
+
+name: Deploy documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r docs/requirements.txt
+
+      # - name: Sync Files
+      #   run: bash docs/_static/sync_files.sh
+
+      - name: Build docs
+        run: |
+          jupyter-book build docs
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_build/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
