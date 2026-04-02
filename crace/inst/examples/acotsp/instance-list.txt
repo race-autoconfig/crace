@@ -1,0 +1,5 @@
+./Instances/2000-1.tsp
+./Instances/2000-2.tsp
+./Instances/2000-3.tsp
+./Instances/2000-4.tsp
+./Instances/2000-5.tsp

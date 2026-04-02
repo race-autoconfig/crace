@@ -1,0 +1,12 @@
+#!/bin/bash
+if ! DIRCRACE=$(python3 -c "import crace, pathlib; print(pathlib.Path(crace.__file__).resolve().parent)" 2>/dev/null); then
+    DIRCRACE="$(cd "$(dirname "$0")/.." && pwd)"
+fi
+
+PDF="$DIRCRACE/vignettes/crace-package.pdf"
+
+case "$OSTYPE" in
+  darwin*) open "$PDF" ;;
+  linux*)  xdg-open "$PDF" ;;
+  *)       start "$PDF" ;;
+esac

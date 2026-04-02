@@ -1,0 +1,212 @@
+###################################################### -*- mode: r -*- #####
+## Scenario setup for Iterated Race (irace).
+############################################################################
+
+## To use the default value of a parameter of irace, simply do not set
+## the parameter (comment it out in this file, and do not give any
+## value on the command line).
+
+## Level of information to display in the text output of crace. A value of
+## 0 silences all debug messages. Higher values provide more verbose debug 
+## messages.
+# debugLevel = 0
+
+## Level to generate log files. 0: only necessary files for the recovering
+## and plots are included. 1: plus execution_log and race_log files. 2: plus 
+## race file. 4: plus mpi log files. 5: all files.
+# logLevel = 0
+
+## Directory where the target algorithm executions will be performed. The
+## default execution directory is the current directory. 
+## Notice: The execution directory must exist before executing crace, it 
+## will not be created automatically.
+# execDir = "./"
+
+## Directory to save tuning results as plain text files. The provided path
+## must be either an absolute path or relative to option execDir.
+# logDir = "./race_log"
+
+## File that contains the description of the parameters of the target
+## algorithm.
+# parameterFile = "./parameters.txt"
+
+## File that contains a list of logical expressions that cannot be TRUE
+## for any evaluated configurations. If empty or NULL, do not use forbidden
+## expressions.
+# forbiddenFile = ""
+
+## File that contains a table of initial configurations. If empty or `NULL`,
+## all initial configurations are randomly generated.
+# configurationsFile = ""
+
+## Directory where training instances are located; either absolute path or
+## relative to current directory. If no `trainInstancesFiles` is provided, all
+## the files in `trainInstancesDir` will be listed as instances.
+# trainInstancesDir = "./Instances"
+
+## File that contains a list of training instances and optionally additional
+## parameters for them. If `trainInstancesDir` is provided, `irace` will
+## search for the files in this folder.
+# trainInstancesFile = ""
+
+## Randomly sample the training instances or use them in the order given.
+# sampleInstances = 1
+
+## Directory where testing instances are located, either absolute or
+## relative to current directory. Instances provided for testing should be 
+## different from the training instances.
+# testInstancesDir = ""
+
+## File that contains a list of test instances and optionally additional
+## parameters for them. Instances provided for testing should be different
+## from the training instances.
+# testInstancesFile = ""
+
+## Number of elite configurations returned by irace that will be tested if
+## test instances are provided.
+# testNbElites = 1
+
+## Statistical test used for elimination. Default test is always 'F-test'
+## unless capping is enabled, in which case the default test is adaptive-dom. 
+## Specifies the statistical test used for elimination:
+#    F-test: Friedman test.
+#    t-test: pairwise t-tests with no correction.
+#    t-test-bonferroni: t-test with Bonferroni's correction for multiple comparisons.
+#    t-test-holm: t-test with Holm's correction for multiple comparisons.
+# testType = ""
+
+## Dominance test used for elimination. Default test is always
+## adaptive-dom when capping is enabled. Dominance is for capping and adaptive
+## dominance is for adaptive capping.
+# domType = ""
+
+## Specifies how many instances are evaluated before the first elimination
+## test.The value of option firstTest must be a multiple of the value of option
+## eachTest. When option capping is enabled, the default value is 1; while option
+## capping is disabled, the default value is 5.
+# firstTest = 5 
+
+## Specifies how many instances are evaluated for each configuration
+## between elimination tests.
+# eachTest = 1
+
+## Specifies the number of finished target executions should be included in
+## one elimination test. This option can decrease the frequency to call elimination
+## test.The values 0 or 1 mean to call elimination test when one target execution is
+## finished. The greater number, the lower frequency to call test.
+# testExperimentSize = 0
+
+## Confidence level for the elimination test.
+# confidence = 0.95
+
+## Define a script that evaluates a configuration of the target algorithm on
+## a particular instance. See templates.
+# targetRunner = "./target-runner"
+
+## An executable command line that call a script file using specific executable 
+## software for each configuration that executes the target algorithm on a
+## particular instance, when `targetRunner` cannot be executed directly 
+## (e.g., a Python script in Windows).
+# targetRunnerLauncher = NA
+
+## Number of times to retry a call to `targetRunner` if the call failed.
+# targetRunnerRetries = 0
+
+## Maximum number of runs (invocations of `targetRunner`) that will be
+## performed. It determines the maximum budget of experiments for the tuning.
+# maxExperiments = 0
+
+## Maximum total execution time for the executions of `targetRunner`.
+## `targetRunner` must return two values: cost and time. This value and the
+## one returned by `targetRunner` must use the same units (seconds, minutes,
+## iterations, evaluations, ...).
+# maxTime = 0
+
+##  Maximum number of decimal places that are significant for numerical
+## (real) parameters.
+# digits = 4
+
+## Number of calls to `targetRunner` to execute in parallel. Values `0` or `1`
+## mean no parallelization.
+# parallel = 0
+
+## Enable/disable MPI. Use `mpi4py` to execute `targetRunner` in parallel
+## (parameter `parallel` is the number of slaves).
+# mpi = 0
+
+## The minimum number of alive configurations that will be tuned in the
+## racing procedure. By default (when equal to 0), this value will be determined
+## by the number of parameters of the provided scenario.
+# nbConfigurations = 0
+
+## Maximum number of elite configurations selected in the racing procedure.
+## By default (when equal to 0), this value will be set as 6.
+# maxNbElites = 0
+
+## Enable/disable elitist crace.In the elitist version of crace, only
+## configurations having the most executions can be selected as elites, which are used
+## for sampling new configurations or updating the models.In the elite version of
+## crace, at most maxNbElites configurations in the top of rank from elimination test
+## will be selected as elites.
+# elitist = 1
+
+## Enable/disable global model.In the elitist version of crace, only global
+## model is alive during the race procedure, which is used for sampling new
+## configurations or updating the model.It can only be activated when melitist is
+## enable.
+# globalModel = 0
+
+## Number of times to update the model(s) in the race. The default number
+## is based on the number of parameters of the provided scenario.
+# modelUpdateByStep = 0
+
+## Enable/disable the sampling of the training instances strictly. If the
+## option sampleInsStrict is disabled, the challenge is discovered when there is no
+## enough alive configuration. Otherwise, the challenge is discovered immediately.
+# sampleInsStrict = 0
+
+## The probability for sampling new instance when there is a challenge. The
+## default value is 1, which means it will always sample a new instance when there is
+## a challenge, which means there are statistical similar configurations when using
+## statistical test and there is a new elite configuration wins the old with the most
+## instances when using aggresive test.
+# sampleInsFrequency = 1
+
+## The number of configurations that an instance can undergo without
+## yielding any improvement. The default value is 0, which means there is no such a
+## limitation for configurations.
+# instancePatience = 0
+
+## The number of times of the soft-restart strategy applied to avoid
+## premature convergence of the probabilistic model. When there is no new
+## configuration after 100 tries, the probabilistic model of alive configurations is
+## soft restarted. The default value is -1, indicating an unlimited number of restart
+## attempts. and the racing procedure will be terminated when all budgets are
+## exhausted.
+# softRestart = 1
+
+## Enable/disable the use of capping, a technique designed for minimizing
+## the computation time of configurations. This option is only available when option
+## elitist is activated. When enabling this option, crace provides an execution time
+## bound to each target algorithm execution.
+# capping = 0
+
+## Maximum execution time bound for each target algorithm execution when
+## option capping is enabled.
+# boundMax = 0
+
+## Maximum execution bound for targetRunner especially for training phase.
+## It could be specified when capping is enabled and you wish to use a different
+## runtime bound from the test phase.
+# boundMaxDev = 0
+
+## Precision used for calculating the execution time. It must be specified
+## when capping is enabled.
+# boundDigits = 0
+
+## Seed to initiallize the random number generator. The seed must be a
+## positive integer. If the seed is ""or NULL, a random seed will be generated.
+# seed = NA
+
+## END of scenario file
+############################################################################

@@ -1,0 +1,31 @@
+@inproceedings{10.1145/3583133.3596408,
+author = {Xiao, Yunshuang and P\'{e}rez C\'{a}ceres, Leslie and L\'{o}pez-Ib\'{a}\~{n}ez, Manuel and St\"{u}tzle, Thomas},
+title = {Algorithm Configuration via Continuously Racing: Preliminary Results},
+year = {2023},
+isbn = {9798400701207},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3583133.3596408},
+doi = {10.1145/3583133.3596408},
+abstract = {Automatic algorithm configuration procedures aim at supporting the design and application of optimization algorithms by providing specialized tools to automatically adjust their parameters to use the available computational resources effectively. The irace configurator is a state-of-the-art method implementing an iterated racing procedure that, in its current implementation, allows parallel executions of the target algorithm. Parallel evaluation is crucial for the efficient use of computational resources, reducing the wall-clock time that the configuration process needs to find a good configuration. In this work, we propose an alternative to irace that performs a single race instead of iterative races. The continuously racing configurator (crace) evaluates, removes and generates new configurations asynchronously, granting a high level of flexibility regarding the configuration process when compared to the previous iterative scheme. In this paper, we provide a general description of the crace configuration procedure and perform initial exploratory experiments on five configuration scenarios. These experiments focus on evaluating the effect of the minimum number of configurations required to be involved in the race and the number of parallel evaluations. The first results are encouraging, showing that crace can be a competitive procedure on the scenarios evaluated.},
+booktitle = {Proceedings of the Companion Conference on Genetic and Evolutionary Computation},
+pages = {1744–1752},
+numpages = {9},
+keywords = {racing methods, automated algorithm design, automated algorithm configuration},
+location = {Lisbon, Portugal},
+series = {GECCO '23 Companion}
+}
+
+@article{LOPEZIBANEZ201643,
+title = {The irace package: Iterated racing for automatic algorithm configuration},
+journal = {Operations Research Perspectives},
+volume = {3},
+pages = {43-58},
+year = {2016},
+issn = {2214-7160},
+doi = {https://doi.org/10.1016/j.orp.2016.09.002},
+url = {https://www.sciencedirect.com/science/article/pii/S2214716015300270},
+author = {Manuel López-Ibáñez and Jérémie Dubois-Lacoste and Leslie {Pérez Cáceres} and Mauro Birattari and Thomas Stützle},
+keywords = {Automatic algorithm configuration, Racing, Parameter tuning},
+abstract = {Modern optimization algorithms typically require the setting of a large number of parameters to optimize their performance. The immediate goal of automatic algorithm configuration is to find, automatically, the best parameter settings of an optimizer. Ultimately, automatic algorithm configuration has the potential to lead to new design paradigms for optimization software. The irace package is a software package that implements a number of automatic configuration procedures. In particular, it offers iterated racing procedures, which have been used successfully to automatically configure various state-of-the-art algorithms. The iterated racing procedures implemented in irace include the iterated F-race algorithm and several extensions and improvements over it. In this paper, we describe the rationale underlying the iterated racing procedures and introduce a number of recent extensions. Among these, we introduce a restart mechanism to avoid premature convergence, the use of truncated sampling distributions to handle correctly parameter bounds, and an elitist racing procedure for ensuring that the best configurations returned are also those evaluated in the highest number of training instances. We experimentally evaluate the most recent version of irace and demonstrate with a number of example applications the use and potential of irace, in particular, and automatic algorithm configuration, in general.}
+}

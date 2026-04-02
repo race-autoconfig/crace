@@ -1,0 +1,6 @@
+./Instances/mik.250-1-50.1.mps
+./Instances/mik.250-1-50.2.mps
+./Instances/mik.250-1-50.3.mps
+./Instances/mik.250-5-50.1.mps
+./Instances/mik.250-5-50.2.mps
+./Instances/mik.250-5-50.3.mps

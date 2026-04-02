@@ -1,0 +1,28 @@
+############################################################################
+# folder to save log files and outputs
+execDir = "./arena"
+
+# required basic files
+parameterFile = "./parameters.txt"
+configurationsFile = "./default.txt"
+forbiddenFile = "./forbidden.txt"
+targetRunner = "./target-runner"
+
+# instances
+# trainInstancesDir = ""
+# trainInstancesFile = ""
+# testInstancesDir = ""
+# testInstancesFile = ""
+
+# budgets
+maxExperiments = 100
+
+# elimination test
+testType = "t-test"
+domType = ""
+digits = 4
+firstTest = 3
+elitist = 1
+
+# End of scenario file
+############################################################################

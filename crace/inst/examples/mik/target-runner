@@ -1,0 +1,114 @@
+#!/bin/bash -l
+###############################################################################
+# This script is to tune the CPLEX software.
+# FOR TESTING
+#
+# PARAMETERS:
+# $1 is the ID of the candidate to be evaluated
+# $2 is the instance ID
+# $3 is the seed
+# $4 is the instance name
+# $5 is the runtime budget
+# $6 is the maximum runtime budget
+# The rest ($* after `shift 6') are parameters for running CPLEX
+#
+# RETURN VALUE:
+# This script should print a single numerical value (the value to be minimized).
+###############################################################################
+error() {
+    echo "`TZ=UTC date`: $0: error: $@" >&2
+    exit 1
+}
+
+# Fixed parameters that should be always passed to CPLEX.
+CONFIG_ID=$1
+INSTANCE_ID=$2
+SEED=$3
+INSTANCE=$4
+RUNTIME_LIMIT=$5
+BOUND_MAX=$6
+# All other parameters are the candidate parameters to be passed to program
+shift 6 || exit 1
+CAND_PARAMS=$*
+
+IFS=" "
+i=0
+MOD_PARAMS=""
+
+for ELEMENT in $CAND_PARAMS
+do
+    mod=$(( $i % 2 ))
+    if [ "$mod" -eq "0" ]; then
+      MOD_PARAMS="${MOD_PARAMS} -${ELEMENT}"
+    else      
+      MOD_PARAMS="${MOD_PARAMS} '${ELEMENT}'"
+    fi
+    i=$(( $i + 1))
+done
+
+STDOUT=c${CONFIG_ID}-${INSTANCE_ID}-${SEED}.stdout
+STDERR=c${CONFIG_ID}-${INSTANCE_ID}-${SEED}.stderr
+
+# Now we can call CPLEX by building a command line with all parameters for it
+# Standard output in EXE are redirected to STDOUT files
+# Standard error in EXE are redirected to STDERR files
+# runsolver is required for time varing scenarios
+ruby ./aclib/executable/cplex12.6_wrapper_aclib.rb --memoryLimit 1000 --runsolverLocation /path/to/runsolver --allowedMIPgap 0 --objFileLocation none ${INSTANCE} 0 ${RUNTIME_LIMIT} 2147483647 ${SEED} ${MOD_PARAMS} 1> ${STDOUT} 2> ${STDERR}
+
+# The output of the candidate $CONFIG_ID should be written in the file 
+# Does this file exist?
+if [ ! -s "${STDOUT}" ]; then
+    # In this case, the file does not exist. Let's exit with a value 
+    # different from 0. In this case crace will stop with an error.
+    error "${STDOUT}: No such file or directory"
+fi
+
+# outputs: Result for ParamILS: #{$status}, 0, 0, 0, #{$seed}
+COST=$(cat ${STDOUT} | grep "Result for" | cut -d ':' -f2 | cut -d ',' -f2)
+TIME=$(echo $COST)
+
+STATUS=$(cat $STDOUT | grep "Result for" | cut -d ":" -f2 | cut -d "," -f1)
+STATUS="$(echo -e "${STATUS}" | sed -e 's/^[[:space:]]*//')"
+
+LENGTH=$(cat $STDOUT | grep "Result for" | cut -d ":" -f2 | cut -d "," -f3)
+BESTSOL=$(cat $STDOUT | grep "Result for" | cut -d ":" -f2 | cut -d "," -f4)
+
+# parse results based on status
+if [ "$STATUS" = "CRASHED" ]; then
+  echo "Inf 0"
+  rm -rf "${STDOUT}" "${STDERR}" 
+  exit 0
+fi
+
+if [ "$STATUS" = "ABORT" ]; then
+    echo "Inf 0"
+	  rm -rf "${STDOUT}" "${STDERR}"
+    exit 0
+fi
+
+if [ "$STATUS" = "TIMEOUT" ]; then
+    COST=${BOUND_MAX}
+    TIME=${RUNTIME_LIMIT}
+fi 
+
+if [ -s "${STDERR}" ]; then
+  if grep -q "Segmentation fault" "${STDERR}" ; then
+    echo "Inf 0"
+    rm -rf "${STDOUT}" "${STDERR}" 
+    exit 0
+  fi
+fi
+
+# This script should return double numerical values, the best objective 
+# value found by this run of CPLEX. The following line is to extract
+# this value from the file containing CPLEX output.
+# when the last line is a number and the best objective value
+if ! [[ "$COST" =~ ^[0-9]+([.][0-9]+)?$ ]] || ! [[ "$TIME" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    error "${STDOUT}: Output is not a number"
+fi
+
+echo "${COST} ${TIME}"
+
+# We are done with our duty. Clean files and exit with 0 (no error).
+rm -rf "${STDOUT}" "${STDERR}" 
+exit 0

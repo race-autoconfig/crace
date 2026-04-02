@@ -1,0 +1,32 @@
+############################################################################
+# folder to save log files and outputs
+execDir = "./arena"
+
+# required basic files
+parameterFile = "./parameters.txt"
+configurationsFile = "./default.txt"
+targetRunner = "./target-runner"
+
+# instances
+# trainInstancesDir = ""
+# testInstancesDir = ""
+# trainInstancesFile = ""
+# testInstancesFile = ""
+
+# budgets
+maxTime = 3600
+maxExperiments = 1000
+
+# capping
+capping = 1
+boundMax  = 300
+boundDigits = 5
+
+# elimination test
+domType = "adaptive-dom"
+
+# others
+targetRunnerRetries = 3
+
+# End of scenario file
+############################################################################

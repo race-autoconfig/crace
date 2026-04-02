@@ -1,0 +1,3 @@
+#!/bin/bash
+DIRCRACE=$(pip3 show crace | grep Location | cut -d ' ' -f2)
+python3 "$DIRCRACE/crace/scripts/main.py" "$@"

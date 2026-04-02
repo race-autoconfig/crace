@@ -1,0 +1,79 @@
+# ============================================================
+# GitHub Actions Workflow: Build and publish package to TestPyPI
+#
+# This workflow builds the source distribution (sdist) and
+# wheel for the project and publishes them to TestPyPI using
+# Trusted Publishing.
+#
+# Trigger:
+#   - Runs automatically when a GitHub release is published.
+#
+# Steps:
+#   1. Checkout repository
+#   2. Set up Python environment
+#   3. Install build dependencies
+#   4. Build sdist and wheel
+#   5. Upload package to TestPyPI
+# ============================================================
+name: Publish to TestPyPI
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-publish-test:
+    runs-on: ubuntu-latest
+    environment: publish-testpypi
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine setuptools wheel
+
+      - name: Build package
+        run: python -m build
+
+      - name: Check distribution
+        run: twine check dist/*
+
+      - name: Get version
+        id: version
+        run: echo "VERSION=$(python -c 'from description import version; print(version)')" >> $GITHUB_OUTPUT
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+      - name: Wait for availability
+        run: sleep 10
+
+      - name: Test install from TestPyPI
+        run: |
+          pip install --no-cache-dir \
+            -i https://test.pypi.org/simple/ \
+            --extra-index-url https://pypi.org/simple \
+            crace==${{ steps.version.outputs.VERSION }}
+
+      - name: Verify version
+        run: |
+          VERSION=$(python -c "from description import version; print(version)")
+          INSTALLED=$(python -c "import crace; print(crace.__version__)")
+          if [ "$VERSION" != "$INSTALLED" ]; then
+            echo "Version mismatch: $VERSION vs $INSTALLED"
+            exit 1
+          fi
+
+      - name: Test CLI
+        run: crace --help

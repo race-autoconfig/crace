@@ -1,0 +1,89 @@
+#!/bin/bash
+# This file is used to call crace parallely
+set -e
+set -o pipefail
+
+# combine all parameters to $1
+error () {
+    echo "$0: error: $@" >&2
+    exit 1
+}
+
+if [ $# -eq 0 ]; then
+    echo "Usage: ./crace-parallel <REPETITIONS> --execdic <EXECDIR> --expname <EXPNAME> additional_args_to_crace"
+    exit 1
+fi
+
+
+echo -e "# NOTE: calling python3 using the global environment"
+if ! command -v crace >/dev/null 2>&1; then
+    echo -e "#\n# ERROR: 'crace' command not found."
+    echo -e "#\n# Python location:"
+    echo -e "#   python: $(command -v python || true)"
+    echo -e "#   python3: $(command -v python3 || true)"
+    echo -e "#\n# PATH: "
+    echo "$PATH" | tr ':' '\n' | sed 's/^/#   /'
+    echo -e "#\n# Try installing 'crace' or check your Python environment."
+    exit 127
+fi
+
+
+COMMAND_LINE="$0 $*"
+
+REPETITIONS=1
+EXECDIR=$(pwd)
+EXPNAME=exp
+SEED=1234567
+
+REPETITIONS=$1
+shift
+
+PARAMS=
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --execdir) shift; EXECDIR="$1"; shift;;
+        --expname) shift; EXPNAME="$1"; shift;;
+        --repetitions) shift; REPETITIONS="$1"; shift;;
+        *) PARAMS="$PARAMS $1"; shift;;# terminate case
+  esac
+done
+
+crace_main() {
+pid="${BASHPID:-$$}"
+STDOUT="$EXECDIR/crace-${pid}.stdout"
+STDERR="$EXECDIR/crace-${pid}.stderr"
+
+crace --exec-dir "$EXECDIR" --seed "$RUNSEED" $PARAMS \
+    > >(tee "$STDOUT") \
+    2> >(tee "$STDERR" >&2)
+
+status=$?
+exit $status
+}
+
+# Number of repetitions of crace
+START=1
+
+if [[ "$REPETITIONS" =~ ^([0-9]+)-([0-9]+)$ ]] ; then
+    START=${BASH_REMATCH[1]}
+    REPETITIONS=${BASH_REMATCH[2]}
+elif ! [[ "$REPETITIONS" =~ ^[0-9]+$ ]] ; then
+    error "number of repetitions must be an integer"
+fi
+
+# execDir (--exec-dir) directory
+EXECDIR_PREFIX=${EXECDIR:-execDir}
+
+for i in $(seq $START $REPETITIONS); do
+    EXECDIR=$(printf "%s/%s-%02d" "$EXECDIR_PREFIX" "$EXPNAME" "$i")
+    # if [ -d $EXECDIR ]; then
+    #     creat_time=$(date -r $EXECDIR +"%d%m%y.%H%M")
+    #     NEW_EXECDIR=$(printf '%s/%s.exp-%002d' ${EXECDIR_PREFIX} ${creat_time} $i)
+    #     mv $EXECDIR $NEW_EXECDIR
+    # fi
+    rm -rf $EXECDIR
+    mkdir -p $EXECDIR
+    RUNSEED=$((SEED + i))
+    crace_main $(printf '%002d' $i) & 
+    sleep 1
+done

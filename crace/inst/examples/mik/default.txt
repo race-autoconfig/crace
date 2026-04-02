@@ -1,0 +1,16 @@
+## Template for specifying initial parameter configurations, for
+## example, the default configuration, in irace.
+##
+## This filename must be specified via the --configurations-file command-line option
+## (or configurationsFile in scenario.txt).
+##
+## The format is one parameter configuration per line, and one parameter per
+## column. The first line gives the parameter name corresponding to
+## each column (names must match those given in the parameters
+## file). Each configuration must satisfy the
+## parameter conditions (NA should be used for those parameters that
+## are not enabled for a given configuration) and, if given, the
+## constraints that describe forbidden configurations.
+barrier_limits_growth barrier_algorithm barrier_crossover barrier_limits_corrections barrier_ordering barrier_startalg emphasis_memory emphasis_mip emphasis_numerical feasopt_mode lpmethod mip_cuts_cliques mip_cuts_covers mip_cuts_disjunctive mip_cuts_flowcovers mip_cuts_gomory mip_cuts_gubcovers mip_cuts_implied mip_cuts_mcfcut mip_cuts_mircut mip_cuts_pathcut mip_cuts_zerohalfcut mip_limits_aggforcut mip_limits_cutsfactor mip_limits_cutpasses mip_limits_gomorycand mip_limits_gomorypass mip_limits_strongcand mip_limits_strongit mip_submip_nodelimit mip_ordertype mip_strategy_backtrack mip_strategy_bbinterval mip_strategy_branch mip_strategy_dive mip_strategy_file mip_strategy_fpheur mip_strategy_heuristicfreq mip_strategy_lbheur mip_strategy_nodeselect mip_strategy_order mip_strategy_presolvenode mip_strategy_probe mip_strategy_rinsheur mip_strategy_search mip_strategy_startalgorithm mip_strategy_subalgorithm mip_strategy_variableselect network_netfind network_pricing perturbation_constant preprocessing_aggregator preprocessing_boundstrength preprocessing_coeffreduce preprocessing_dependency preprocessing_dual preprocessing_fill preprocessing_linear preprocessing_numpass preprocessing_reduce preprocessing_relax preprocessing_repeatpresolve preprocessing_symmetry read_scale sifting_algorithm simplex_crash simplex_dgradient simplex_limits_perturbation simplex_limits_singularity simplex_perturbation_switch simplex_pgradient simplex_pricing simplex_refactor simplex_tolerances_markowitz
+1e+12 0 0 -1 0 1 no 0 no 0 0 0 0 0 0 0 0 0 0 0 0 0 3 4 0 200 0 NA NA 500 0 0.9999 7 0 0 1 0 0 no 1 NA 0 0 0 0 0 0 0 2 0 NA -1 -1 2 -1 0 10 1 -1 3 -1 -1 -1 0 0 1 0 0 10 no 0 0 0 0.01
+

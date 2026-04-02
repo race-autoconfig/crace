@@ -1,0 +1,48 @@
+# Book settings
+title: crace
+authors: Leslie Pérez Cáceres, Jonas Kuckling, Pablo Contreras, Yunshuang Xiao, Thomas Stützle
+
+# Execution settings
+execute:
+  execute_notebooks: "off"
+
+# HTML settings
+html:
+  use_repository_button: true
+  use_issues_button: true
+  home_page_in_navbar: true
+
+# Repository information
+repository:
+  url: https://github.com/auto-configurator/crace
+  path_to_book: .
+  branch: main
+
+sphinx:
+  config:
+    project: "crace"
+
+    include_patterns:
+      - "**"
+      - "../README.md"
+
+    html_extra_path:
+      - '../crace/vignettes/crace-package.pdf'
+
+    html_context:
+      github_user: auto-configurator
+      github_repo: crace
+      github_version: main
+      doc_path: docs
+
+    html_show_sourcelink: false
+
+    html_theme: piccolo_theme
+
+    html_static_path: ['_static']
+    html_css_files: [
+        'css/custom.css',
+    ]
+    html_js_files: [
+        'js/navbar.js',
+    ]

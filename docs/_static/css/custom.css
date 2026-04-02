@@ -1,0 +1,168 @@
+/* ===============================
+   Piccolo Dark Mode Code Styling
+   =============================== */
+
+/*****************************************************************************/
+/* fix top height */
+:root { --topnav-h: 64px; }
+
+/* remove top and margin */
+.document,
+.documentwrapper,
+.bodywrapper,
+.body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* set top height */
+.document {
+  margin-top: 0 !important;
+  padding-top: var(--topnav-h) !important;
+}
+
+
+/*****************************************************************************/
+/* Set body width */
+.documentwrapper {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 auto !important;
+}
+.documentwrapper
+.bodywrapper {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin: 0 auto !important;
+}
+.documentwrapper
+.bodywrapper
+.body{
+    width: 95% !important;
+    margin: 0 auto !important;
+}
+
+
+/*****************************************************************************/
+/* Theme settings */
+/* set color for top nav */
+html #top_nav,
+html #top_nav nav {
+    background-color: #2c2c30 !important;
+}
+/* set color for search box */
+#searchbox form.search input[type=text] {
+  background-color: #ffffff;
+  color: #2c2c30;
+}
+#searchbox form.search input[type=text]::placeholder {
+  color: #bbbbbb;
+}
+#searchbox form.search input[type=submit] {
+  background-color: #ffffff;
+  color: #2c2c30;
+}
+
+/* LIGHT MODE */
+html[data-mode="light"] .highlight {
+    background-color: #f6f8fa !important;
+    border: 1px solid #e1e4e8 !important;
+}
+html[data-mode="light"] .highlight pre {
+    background-color: #f6f8fa !important;
+    color: #24292f !important;
+}
+html[data-mode="light"] code.literal {
+    background-color: #f3f4f6 !important;
+    color: #d14 !important;
+}
+html[data-mode="light"] .copybtn svg {
+    stroke: #57606a !important;
+}
+
+/* DARK MODE */
+html[data-mode="dark"] .highlight {
+    background-color: #1e1e1e !important;
+    border: 1px solid #2c2c2c !important;
+}
+html[data-mode="dark"] .highlight pre {
+    background-color: #1e1e1e !important;
+    color: #dddddd !important;
+}
+html[data-mode="dark"] code.literal {
+    background-color: #2a2a2a !important;
+    color: #ffcc66 !important;
+}
+html[data-mode="dark"] .copybtn svg {
+    stroke: #dddddd !important;
+}
+
+/* DARKEST MODE */
+html[data-mode="darkest"] .highlight {
+    background-color: #0d1117 !important;
+    border: 1px solid #30363d !important;
+}
+html[data-mode="darkest"] .highlight pre {
+    background-color: #0d1117 !important;
+    color: #c9d1d9 !important;
+}
+html[data-mode="darkest"] code.literal {
+    background-color: #161b22 !important;
+    color: #79c0ff !important;
+}
+html[data-mode="darkest"] .copybtn svg {
+    stroke: #c9d1d9 !important;
+}
+
+
+/*****************************************************************************/
+/* Setting width for 3-columns */
+:root {
+  --sidebar-right: clamp(8rem, 18vw, 30rem);
+  --sidebar-left: clamp(8rem, 12vw, 15rem);
+}
+/* Main content */
+div.document div.documentwrapper {
+  max-width: none;
+  width: 100%;
+}
+div.document {
+  margin-left: var(--sidebar-left);
+  margin-right: var(--sidebar-right);
+}
+@media (max-width: 50rem) {
+  div.document {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+/* Sidebar */
+div.sphinxsidebar {
+  width: var(--sidebar-left);
+}
+@media (max-width: 50rem) {
+  div.sphinxsidebar {
+    display: none;
+  }
+}
+/* Right sidebar */
+div#right_sidebar {
+  width: var(--sidebar-right);
+}
+@media (max-width: 50rem) {
+  div#right_sidebar {
+    display: none;
+  }
+}
+/* Buttons */
+div.button_nav_wrapper {
+  margin-left: var(--sidebar-left);
+  margin-right: var(--sidebar-right);
+}
+@media (max-width: 50rem) {
+  div.button_nav_wrapper {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}

@@ -1,0 +1,146 @@
+#!/bin/bash
+# This is an example for launching crace using the --mpi
+# option in a SLURM Cluster.
+set -e
+set -o pipefail
+
+# combine all parameters to $1
+error () {
+    echo "$0: error: $@" >&2
+    exit 1
+}
+
+# Issue usage if no parameters are given.
+if [ $# == 0 ]; then
+    echo "Usage: ./profile-mpi --bindir <BINDIR> --execdir <EXECDIR> --expname <EXPNAME> --repetitions <REPETITIONS> --parallel <NB_SLAVES> --rack <rack_number> --queue <QUEUE_ARG> --reservation <RESERVATION> additional_args_to_crace"
+    exit 1
+fi
+
+COMMAND_LINE="$0 $*"
+
+# initialization
+BINDIR=$(python -c "import crace; import os; print(os.path.dirname(crace.__file__))")
+EXECDIR=$(pwd)
+EXPNAME=test
+NB_SLAVES=0
+RACK_NUM=None
+QUEUE_ARG=None
+REPETITIONS=10
+RESERVATION=None
+
+PARAMS=
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --bindir) shift; BINDIR="$1"; shift;;
+        --execdir) shift; EXECDIR="$1"; shift;;
+        --expname) shift; EXEPNAME="$1"; shift;;
+        --repetitions) shift; REPETITIONS="$1"; shift;;
+        --parallel) shift; NB_SLAVES="$1"; shift;;
+	    --rack) shift; RACK_NUM="$1"; shift;;
+	    --queue) shift; QUEUE_ARG="$1"; shift;;
+        --reservation) shift; RESERVATION="$1"; shift;;
+	    --seed) shift; 
+            while [[ "$1" =~ ^[0-9]+$ ]]; do
+                SEEDS+=("$1")
+                shift
+            done;;
+        *) PARAMS="$PARAMS $1"; shift;;# terminate case
+  esac
+done
+
+let NB_PARALLEL_PROCESS=NB_SLAVES+1
+
+MPI_BOOL=True
+if [ $NB_SLAVES -lt 2 ]; then
+    MPI_BOOL=False
+fi
+
+# allowed queue values
+QUEUE=long
+case $QUEUE_ARG in
+	long) QUEUE=long;;
+	short) QUEUE=short;;
+	*) ;;
+esac
+
+# Machine on the cluster
+MACHINE=None
+case $RACK_NUM in
+	4)MACHINE=name1;;
+	5)MACHINE=name2;;
+	6)MACHINE=name3;;
+	7)MACHINE=name4;;
+	*) ;;
+esac
+
+# provide the address where openmpi is installed
+MPIRUN=/path/to/mpirun
+
+if [ -f "${BINDIR}/scripts/mpi.py" ]; then
+    MPIFILE=$BINDIR/scripts/mpi.py
+else
+    error "No mpi file found in ${BINDIR}."
+fi
+
+crace_main() {
+    # We would like to use $BASHPID here, but OS X version of bash does not
+    # support it.
+    JOBNAME=$EXPNAME-$1
+
+    # add command line for slurm option reservation
+    RES_LINE=""
+    if [[ -n "$RESERVATION" && "$RESERVATION" != "None" ]]; then
+        RES_LINE="#SBATCH --reservation=${RESERVATION}"
+    fi
+
+    exec sbatch <<EOF
+#!/bin/sh
+#SBATCH -J $JOBNAME
+#SBATCH -p $MACHINE
+#SBATCH -q $QUEUE
+##SBATCH -N 1   # maximum number of nodes for each job
+#SBATCH -n $NB_PARALLEL_PROCESS
+#SBATCH -o $EXECDIR/crace-$$.stdout
+#SBATCH -e $EXECDIR/crace-$$.stderr
+##SBATCH -wd $CURRENT_DIR # altough this is the default for slurm
+
+$RES_LINE
+
+export OMPI_MCA_plm_rsh_disable_qrsh=1
+export PATH
+
+source /path/to/env     # activate python environment
+module load py3-mpi4py
+
+$MPIRUN -n $NB_PARALLEL_PROCESS python3 -m mpi4py $MPIFILE \
+        --exec-dir $EXECDIR --parallel $NB_SLAVES --mpi $MPI_BOOL $PARAMS
+
+EOF
+}
+## End of customization
+
+# Number of repetitions of crace
+START=1
+
+if [[ "$REPETITIONS" =~ ^([0-9]+)-([0-9]+)$ ]] ; then
+    START=${BASH_REMATCH[1]}
+    REPETITIONS=${BASH_REMATCH[2]}
+elif ! [[ "$REPETITIONS" =~ ^[0-9]+$ ]] ; then
+    error "number of repetitions must be an integer"
+fi
+
+# execDir (--exec-dir) directory
+EXECDIR_PREFIX=${EXECDIR:-execDir}
+
+for i in $(seq $START $REPETITIONS); do
+    EXECDIR=$(printf '%s/exp-%002d' ${EXECDIR_PREFIX} $i)
+    # if [ -d $EXECDIR ]; then
+    #     creat_time=$(date -r $EXECDIR +"%d%m%y.%H%M")
+    #     NEW_EXECDIR=$(printf '%s/%s.exp-%002d' ${EXECDIR_PREFIX} ${creat_time} $i)
+    #     mv $EXECDIR $NEW_EXECDIR
+    # fi
+    rm -rf $EXECDIR
+    mkdir -p $EXECDIR
+    crace_main $(printf '%002d' $i) & 
+    sleep 1
+done
