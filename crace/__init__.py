@@ -1,36 +1,43 @@
 # crace/__init__.py
 
-from crace.scripts import run
-from crace.scripts import crace_main as main
+_IMPORT_MAPPING = {
+    'run': 'crace.scripts.run',
+    'main': 'crace.scripts.crace_main',
+    'Reader': 'crace.utils',
+    'Scenario': 'crace.containers.scenario',
+    'Parameters': 'crace.containers.parameters',
+    'Instances': 'crace.containers.instances',
+    'CraceOptions': 'crace.containers.crace_options',
+    'CraceResults': 'crace.containers.crace_results',
+    'Configurations': 'crace.containers.configurations',
+}
 
-from crace.utils import Reader
-from crace.containers.scenario import Scenario
-from crace.containers.parameters import Parameters
-from crace.containers.instances import Instances
-from crace.containers.crace_options import CraceOptions
-from crace.containers.crace_results import CraceResults
-from crace.containers.configurations import Configurations
+_DESC_MAPPING = {
+    '__version__': 'version',
+    '__author__': 'authors',
+    '__maintainers__': 'maintainers',
+    '__long_description__': 'long_description',
+    '__doc__': 'description'
+}
 
-import crace.settings.description as _csd
+__all__ = list(_IMPORT_MAPPING.keys()) + list(_DESC_MAPPING.keys())
 
 
-__version__ = _csd.version
-__author__ = _csd.authors
-__maintainers__ = _csd.maintainers
-__long_description__ = _csd.long_description
-__doc__ = _csd.description
+def __getattr__(name: str):
+    import importlib
+    import crace.settings.description as _csd
 
-__all__ = [
-    'run',
-    'main',
-    'Reader',
-    'Scenario',
-    'Parameters',
-    'Instances',
-    'CraceOptions',
-    'Configurations',
-    'CraceResults'
-]
+    if name in _DESC_MAPPING:
+        return getattr(_csd, _DESC_MAPPING[name])
+
+    if name in _IMPORT_MAPPING:
+        module = importlib.import_module(_IMPORT_MAPPING[name])
+
+        if name == 'main':
+            return getattr(module, 'crace_main')        
+        return getattr(module, name)
+
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
 
 def __dir__():
     return __all__

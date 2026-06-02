@@ -1,4 +1,4 @@
-**crace**: An implementation in python of Continuous Racing
+**crace**: Continuous Racing for Automatic Algorithm Configuration
 =============================================================
 
 <!-- badge start -->

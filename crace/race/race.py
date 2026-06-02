@@ -389,7 +389,7 @@ class Race:
         self.ranks = {int(x): int(self.ranks[x]) for x in self.ranks.keys()}
 
         # Get variable values
-        state = {x: self.__dict__[x] for x in variables}
+        state = {x: self.__dict__[x] if x != 'n_instances' else self.experiments.get_n_instances() for x in variables}
 
         # Create to log file
         if os.path.isfile(self.log_race):
@@ -1281,7 +1281,7 @@ class Race:
         else:
             remaining = self.budget - self.used_budget
             self.n_pre_budget = math.ceil(
-                remaining / min(1, self.n_all_updating - self.idx_updating + 1)
+                remaining / max(1, self.n_all_updating - self.idx_updating + 1)
             )
 
 

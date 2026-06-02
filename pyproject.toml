@@ -1,25 +1,50 @@
 [build-system]
-requires = ["setuptools>=70.1", "setuptools_scm"]
+requires = ["setuptools>=70.1", "setuptools_scm", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "crace"
 dynamic = ["version"]
 
-description = "crace: A Python implementation of Continuous Racing"
-readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.6"
-
+description = "crace: Continuous Racing for Automatic Algorithm Configuration"
 authors = [
-
+  { name = "Leslie Pérez Cáceres" },
+  { name = "Jonas Kuckling" },
+  { name = "Pablo Contreras" },
+  { name = "Yunshuang Xiao" },
+  { name = "Thomas Stützle" },
+  { name = "Manuel López-Ibáñez" }
 ]
 maintainers = [
+  { name = "crace developers", email = "race.autoconfig@gmail.com" },
   { name = "Leslie Pérez Cáceres", email = "leslie.perez@pucv.cl" },
-  { name = "Yunshuang Xiao", email = "yunshuang.xiao@ulb.be" },
-  { name = "crace developers", email = "race.autoconfig@gmail.com" }
+  { name = "Yunshuang Xiao", email = "yunshuang.xiao@ulb.be" }
 ]
+readme = { file = "README.md", content-type = "text/markdown" }
 
-license = { text = "GPL-3.0-or-later" }
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+requires-python = ">=3.6"
+classifiers = [
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education", 
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.6",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+
+  "Operating System :: OS Independent",
+]
 
 dependencies = [
   "numpy>=1.19.5",
@@ -33,6 +58,11 @@ dependencies = [
 [project.optional-dependencies]
 all = ["mpi4py>=3.0.3"]
 
+[project.urls]
+Homepage = "https://race-autoconfig.github.io/crace/"
+Documentation = "https://race-autoconfig.github.io/crace/crace-package.pdf"
+Source = "https://github.com/race-autoconfig/crace/"
+Tracker = "https://github.com/race-autoconfig/crace/issues"
 
 [project.scripts]
 crace = "crace.scripts:crace_run"
@@ -43,10 +73,10 @@ include-package-data = true
 
 [tool.setuptools.package-data]
 crace = [
-  "settings/*.json",
+  "settings/*",
   "scripts/*",
-  "inst/**",
-  "vignettes/**"
+  "inst/*",
+  "vignettes/*"
 ]
 
 [tool.setuptools_scm]

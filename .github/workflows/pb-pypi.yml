@@ -16,11 +16,12 @@
 #   5. Upload package to PyPI
 # ============================================================
 
-name: Wheel builder
+name: Publish to PyPI
 
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -45,20 +46,36 @@ jobs:
       - name: Install build dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install build twine
+          pip install build twine setuptools_scm
+
+      - name: Get tag
+        id: tag
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          echo "Tag: $TAG"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Check tag format
         run: |
-          TAG=${GITHUB_REF#refs/tags/}
+          TAG="${{ steps.tag.outputs.tag }}"
           echo "Tag: $TAG"
 
-          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([a-z0-9\.]*)?$ ]]; then
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+((a|b|rc)[0-9]+)?(\.post[0-9]+)?$ ]]; then
             echo "❌ Invalid tag format: $TAG"
             exit 1
           fi
 
           if [[ "$TAG" == *".dev"* ]]; then
             echo "❌ Refusing to publish dev version"
+            exit 1
+          fi
+
+      - name: Check version not on PyPI
+        run: |
+          VERSION=$(python -m setuptools_scm)
+
+          if pip index versions crace | grep "$VERSION"; then
+            echo "❌ Version already exists on PyPI"
             exit 1
           fi
 

@@ -1,19 +1,43 @@
 from datetime import datetime
 
 def _get_version():
+    import os
+    import inspect
+    from pathlib import Path
+
     try:
-        import os
-        path = os.path.join(os.path.dirname(__file__), "..", "_version.py")
-        path = os.path.abspath(path)
-        d = {}
-        with open(path) as f:
-            exec(f.read(), d)
-        return d.get("version", d.get("__version__", "0.0.0"))
+        current_dir = Path(__file__).resolve().parent.parent
+    except NameError:
+        caller_file = inspect.stack()[1].filename
+        current_dir = Path(caller_file).resolve().parent.parent
+
+    dest_ver = current_dir / "_version.py"
+    dest_git = current_dir / "_vergit.py"
+
+    try:
+        if os.path.exists(dest_ver):
+            d = {}
+            with open(dest_ver) as f:
+                exec(f.read(), d)
+            return d.get("version", d.get("__version__", "0.0.0"))
     except Exception:
-        return "0.0.0"
+        pass
+
+    try:
+        import re
+        if os.path.exists(dest_git):
+            d = {}
+            with open(dest_git) as f:
+                exec(f.read(), d)
+            ver = d.get("version", d.get("__version__", "0.0.0"))
+            match = re.search(r"tag:\s*([^,\)]+)", ver)
+            if match: return match.group(1)
+    except Exception:
+        pass
+
+    return "0.0.0"
 
 package_name = "crace"
-version = _get_version()
 authors = ['Leslie Pérez Cáceres', 'Jonas Kuckling', 'Pablo Contreras', 'Yunshuang Xiao', 'Thomas Stützle']
 maintainers = ['Leslie Pérez Cáceres', 'Yunshuang Xiao']
 maintainers_email = ['leslie.perez@pucv.cl', 'yunshuang.xiao@ulb.be']
@@ -21,9 +45,9 @@ contributers = ['Manuel López-Ibáñez']
 contact = 'crace developers'
 contact_email = 'race.autoconfig@gmail.com'
 
-description = "crace: A Python implementation of Continuous Racing"
+description = "crace: Continuous Racing for Automatic Algorithm Configuration"
 long_description = """
-crace: A Python implementation of Continuous Racing
+crace: Continuous Racing for Automatic Algorithm Configuration
 ==========================================================================
 
 crace is a Python implementation of continuous racing 
@@ -32,7 +56,17 @@ It allows non-sequential model convergence during the race and enables the
 design of a more flexible and adaptable configuration procedure.
 """
 
-url = "https://github.com/auto-configurator/crace"
+url = "https://race-autoconfig.github.io/crace/"
+url_home = url
+url_docs = "https://race-autoconfig.github.io/crace/crace-package.pdf"
+url_source = "https://github.com/race-autoconfig/crace/"
+url_tracker = "https://github.com/race-autoconfig/crace/issues"
+urls = {
+    'Homepage': url_home,
+    'Documentation': url_docs,
+    'Source': url_source,
+    'Tracker': url_tracker,
+}
 
 copyright = f"Copyright (c) {datetime.now().year}"
 
@@ -63,5 +97,33 @@ A BibTeX entry for LaTeX users is
 """
 
 update_logs = """
-The first public version: v1.0.0
+Based on v1.0.0
+
+- src:
+  > execution: improve pool management and add support for different python versions
+  > race:
+    • bug fix for log_state: support for 'n_instances'
+    • bug fix for slice budget: min -> max
+
+- package:
+  > makefile: support pyproject, build, tag
+    • pyptoject: generate pyproject.toml from generate_pyproject.py
+    • build: build package
+    • tag: add tag for the current version based on (provided) base tag
+  > improve generate_pyproject.py
+    • add urls
+    • improve classfiers
+  > delete setup.py
+
+  > base information:
+    • modify package description
+
 """
+
+
+def __getattr__(name: str):
+    if name == "version":
+        ver = _get_version()
+        globals()["version"] = ver
+        return ver
+    raise AttributeError(f"module '{__name__}' has no attribute '{name}'")

@@ -39,7 +39,7 @@ def stop_execution_sync(master, pool):
     pool.close()
     print("Pool closed")
     master.stop()
-    print("Master stopped")
+    print("Master stop requested")
     print("Shutdown complete")
 
 
@@ -50,9 +50,26 @@ async def stop_execution_async(master, pool):
     pool.close()
     print("Pool closed")
     await master.stop()
-    print("Master stopped")
-    await asyncio.sleep(0)  # TODO: Check that the executioner did shut down
+    print("Master stop requested")
+    await clear_execution_async()
+    await asyncio.sleep(1)  # TODO: Check that the executioner did shut down
     print("Shutdown complete")
+
+async def clear_execution_async():
+    try:    # python 3.8+
+        for task in asyncio.all_tasks():
+            try:
+                coro = task.get_coro()                # 3.8+
+            except AttributeError:
+                coro = task._coro
+            coro_name = getattr(coro, '__qualname__', '') or getattr(coro, '__name__', '')
+            if 'run' in coro_name and task is not asyncio.current_task():
+                task.cancel()
+                try:
+                    await task
+                except (asyncio.CancelledError, Exception):
+                    pass
+    except Exception: pass  # python 3.6, 3.7
 
 async def stop_execution_checking(master, pool):
     await asyncio.sleep(0)
