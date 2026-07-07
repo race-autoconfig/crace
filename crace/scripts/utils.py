@@ -144,6 +144,8 @@ def _enforce_single_thread_binding(MPI, comm, rank):
     enforce current process bind to the first cpu in the avalible cpu list
     especially to disable SMT when using mpirun --bind-to none
     """
+    error_msg = None
+
     # skip on non-linux
     if not sys.platform.startswith("linux"):
         if rank == 0: print(f"# [Binding] skip: unsupported on platform {sys.platform}")
@@ -164,19 +166,27 @@ def _enforce_single_thread_binding(MPI, comm, rank):
         available_cpus = sorted(list(affinity_mask))
 
         # 4. find out the specific cpu based on the rank id
+        # 5. assign rank to the selected cpu
         if local_rank < len(available_cpus):
             target_cpu = available_cpus[local_rank]
-
-            # 5. assign rank to the selected cpu
             os.sched_setaffinity(0, {target_cpu})
 
-            # print(f"# [Python-Bind] Rank {local_rank} pinned to CPU {target_cpu} (dropped others)", flush=True)
+        # # 4. only one cpu is available, no binding
+        elif len(available_cpus) == 1:
+            pass
+
         else:
-            raise RuntimeError(f"# [Python-Bind] Warning: Not enough CPUs for Rank {local_rank}")
+            error_msg = f"# [Python-Bind] Warning: Not enough CPUs for Rank {local_rank}"
 
     except Exception as e:
-        if not rank: print(f"# [Python-Bind] Failed to enforce binding: {e}", file=sys.stderr)
-        raise e
+        error_msg = f"# [Python-Bind] Failed to enforce binding: {e}"
+    
+    err_dict = {"Rank": rank, "Error": error_msg}    
+    all_err = comm.gather(err_dict, root=0)
+
+    if rank == 0:
+        for err in sorted(all_err, key=lambda x: x["Rank"]):
+            if err["Error"]: raise RuntimeError(err["Error"])
 
 def _get_binding_flag(arguments):
     """

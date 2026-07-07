@@ -17,6 +17,7 @@ Note: this option is unavailable on macOS system.
 import os
 import sys
 import inspect
+import traceback
 
 current_file = os.path.normpath(__file__)
 CRACE_HOME = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
@@ -49,7 +50,7 @@ def start_mpi(args=None, cli: bool=False):
 
     except Exception as e:
         if rank == 0:
-            print(f"\nERROR: There was an error while pining processors: {repr(e)}")
+            print(f"\n! ERROR: There was an error while pining processors:\n!   {e}")
         MPI.COMM_WORLD.Abort(1)
 
     try:
@@ -72,10 +73,13 @@ def start_mpi(args=None, cli: bool=False):
     except (SystemExit, KeyboardInterrupt, Exception) as e:
         if any(isinstance(e, cls) for cls in [x[1] for x in inspect.getmembers(CE, inspect.isclass)]):
             pass
+        if isinstance(e, KeyboardInterrupt) or isinstance(e, SystemExit):
+            pass
         else:
-            print(f"\nERROR: There was an error while executing crace(mpi) on rank {rank}: {repr(e)}")
-            MPI.COMM_WORLD.Abort(1)
-            sys.exit(1)
+            print(f"\n! ERROR: There was an error while executing crace(mpi) on rank {rank}: {repr(e)}")
+            traceback.print_exc()
+        MPI.COMM_WORLD.Abort(1)
+        sys.exit(1)
 
 if __name__ == "__main__":
     """

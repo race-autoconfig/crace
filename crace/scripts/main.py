@@ -117,7 +117,9 @@ def start_cmdline(arguments=None, console: bool=True):
             traceback.print_exc()
             print(e)
 
-    if not console: sys.exit(1)
+    if not console:
+        print("\nExiting crace. (Ignore the following 'MPI_ABORT' messages if appearing.)")
+        sys.exit(1)
     else: return data
 
 def run(*inputs):

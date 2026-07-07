@@ -138,19 +138,12 @@ A BibTeX entry for LaTeX users is
 
 _VERSION = "1.0"
 update_logs = """
-Based on commit 0686d5
+Based on commit 50ee278 (tag: v1.0.0.post1)
 
 - src:
-  - Experiments, ProbabilisticModel:
-    - add 'debug_level' as argument to initialize mentioned class
-
-  - scripts.mpi:
-    - add try-except for mpi execution to ensure exiting
-    - add _check_mpi_env() to check mpi environment
-      - installed mpi4py or not
-      - installed MPI implementation or not
-      - mpi.py called by MPI launcher or not
-    - improve the output of cpu affinity for mpi executions
+  - main.py, mpi.py, utils.py:
+    - improve error handling in start_cmdline(), start_mpi() and _enforce_single_thread_binding()
+    - support single cpu binding in _enforce_single_thread_binding()
 
 """
 
