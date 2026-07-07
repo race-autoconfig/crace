@@ -419,6 +419,7 @@ class TestResults(ExperimentsData):
                            budget_digits=self._options.boundDigits.value,
                            capping=self._options.capping.value,
                            log_level=self._options.logLevel.value,
+                           debug_level=self._options.debugLevel.value,
                            configurations=self._configurations)
 
         f_exp = test._read_log_data(test_fin)

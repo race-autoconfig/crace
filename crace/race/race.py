@@ -174,6 +174,7 @@ class Race:
             budget_digits=self.options.boundDigits.value,
             capping=self.capping,
             log_level=self.log_level,
+            debug_level=self.debug_level,
             configurations=self.configurations,
             onlytest=self.options.onlytest.value,
         )
@@ -205,6 +206,7 @@ class Race:
                 parameters=self.parameters,
                 log_folder=self.options.logDir.value,
                 log_level=self.options.logLevel.value,
+                debug_level=self.debug_level,
                 global_model=self.options.globalModel.value,
                 onlytest=self.options.onlytest.value,
             )
@@ -228,6 +230,7 @@ class Race:
                 parameters=parameters,
                 log_folder=self.options.logDir.value,
                 log_level=self.options.logLevel.value,
+                debug_level=self.debug_level,
                 global_model=self.options.globalModel.value,
                 )
 
@@ -2242,6 +2245,7 @@ class RaceCheck:
             budget_digits=self.options.boundDigits.value,
             capping=self.capping,
             log_level=self.log_level,
+            debug_level=self.debug_level,
             configurations=self.configurations,
         )
 
@@ -2250,6 +2254,7 @@ class RaceCheck:
             parameters=parameters,
             log_folder=self.options.logDir.value,
             log_level=self.options.logLevel.value,
+            debug_level=self.options.debugLevel.value,
             global_model=self.options.globalModel.value)
 
         # In the case there is already configurations in place

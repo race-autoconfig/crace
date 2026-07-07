@@ -808,7 +808,7 @@ class ProbabilisticModel:
     :ivar size: Number of models in the object (equal to number of configurations)
     :ivar hash_models: List of LocalModel objects hashes used maninly to find repeated models.
     """
-    def __init__(self, parameters: Parameters, log_folder: str, log_level: int, recovery_folder=None, read_folder=None, global_model=False):
+    def __init__(self, parameters: Parameters, log_folder: str, log_level: int, debug_level: int, recovery_folder=None, read_folder=None, global_model=False):
         """
         Creates a ProbabilisticModel object
         :param parameters: Parameters object
@@ -834,8 +834,9 @@ class ProbabilisticModel:
         # expressions that were defined with the parameters
         self.forbidden_expressions = ForbiddenExpressions([])
 
-        # create log files
         self.log_level = log_level
+        self.debug_level = debug_level
+        # create log files
         self.model_log = log_folder + "/models.log"
         if recovery_folder is None and read_folder is None:
             file = open(self.model_log, "w")
@@ -848,10 +849,11 @@ class ProbabilisticModel:
                 file.close()
 
     @staticmethod
-    def from_log(configurations: Configurations, parameters: Parameters, log_folder: str, log_level: int, recovery_folder=None, read_folder=None, global_model=False, onlytest=False):
+    def from_log(configurations: Configurations, parameters: Parameters, log_folder: str, log_level: int, debug_level: int, recovery_folder=None, read_folder=None, global_model=False, onlytest=False):
         if onlytest: return
         model = ProbabilisticModel(parameters=parameters, log_folder=log_folder,
-                                   log_level=log_level, recovery_folder=recovery_folder, read_folder=read_folder,
+                                   log_level=log_level, debug_level=debug_level,
+                                   recovery_folder=recovery_folder, read_folder=read_folder,
                                    global_model=global_model,)
         rec_folder = recovery_folder if recovery_folder else read_folder
         model.add_models_from_log(rec_folder, parameters)

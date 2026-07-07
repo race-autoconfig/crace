@@ -11,12 +11,12 @@ Via package mpi4py, only the node with rank value 0, which is set as the master,
 will print the scenario information.
 Besides, using option '--bind-cores', it's feasible to bind each worker to a specific
 physical node on the cluster.
-Note: this option is unavailable on macOS system. 
+Note: this option is unavailable on macOS system.
 """
 
 import os
 import sys
-import socket
+import inspect
 
 current_file = os.path.normpath(__file__)
 CRACE_HOME = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
@@ -24,73 +24,58 @@ CRACE_HOME = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
 if CRACE_HOME not in map(os.path.abspath, sys.path):
     sys.path.insert(0, os.path.abspath(CRACE_HOME))
 
+import crace.errors as CE
 import crace.execution.mpi
 from crace.scripts.main import crace_cmdline
 from crace.containers.scenario import Scenario
-from crace.scripts.utils import _get_binding_flag, _enforce_single_thread_binding, _get_affinity
+from crace.scripts.utils import _check_mpi_env, _get_binding_flag, _enforce_single_thread_binding, _print_affinity_info
 
 def start_mpi(args=None, cli: bool=False):
-    try:
-        from mpi4py import MPI
-        comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
-    except Exception as e:
-        print(f"Error initializing MPI: {e}")
-        MPI.COMM_WORLD.Abort(1)
-        raise e
+    """
+    start crace with mpi4py
+    """
+    MPI, comm, rank = _check_mpi_env()
 
-    # print(rank)
     if cli:
         arguments = args
     else:
         arguments = sys.argv[1:]  # command line arguments as a list
 
-    binding_flag = _get_binding_flag(arguments)
-    if binding_flag: _enforce_single_thread_binding()
+    try:
 
-    # print rank information
-    # ---------- basic info ----------
-    pid = os.getpid()
-    hostname = socket.gethostname()
-    cluster = os.environ.get("SLURM_CLUSTER_NAME", "UNKNOWN")
-    jobid = os.environ.get("SLURM_JOB_ID", "N/A")
-    partition = os.environ.get("SLURM_JOB_PARTITION", "N/A")
+        if _get_binding_flag(arguments):
+            _enforce_single_thread_binding(MPI, comm, rank)    # load option bind-cores from arguments
+        _print_affinity_info(comm, rank)        # print affinity information in order
 
-    # ---------- /proc info ----------
-    cpus_allowed_list, cpus_allowed_mask, source= _get_affinity()
+    except Exception as e:
+        if rank == 0:
+            print(f"\nERROR: There was an error while pining processors: {repr(e)}")
+        MPI.COMM_WORLD.Abort(1)
 
-    # ---------- ordered output ----------
-    comm.Barrier()
-    print(
-        f"\n===== Rank {rank} =====\n"
-        # f"Cluster          : {cluster}\n"
-        f"Source           : {source}\n"
-        f"Node             : {hostname}\n"
-        f"JobID            : {jobid}\n"
-        # f"Partition        : {partition}\n"
-        f"PID              : {pid}\n"
-        f"Cpus_allowed_list: {cpus_allowed_list}\n"
-        f"Cpus_allowed     : {cpus_allowed_mask}\n",
-        flush=True,
-    )
-    comm.Barrier()
-
-    if rank == 0:
-        # print("Master")
-        crace_cmdline(arguments=arguments, console=False, cli=cli)
-        crace.execution.mpi.broadcast_termination_signal()
-    elif rank > 0:
-        # print("Worker")
-        # TODO: Suppress output here
-        # TODO: Suppress creating of log files here
-        scenario = Scenario.from_input(arguments, silent=True)
-        crace.execution.mpi.start_worker(exec_dir=scenario.options.execDir.value,
-                                         exec_cmd=scenario.options.targetRunnerLauncher.value,
-                                         target_runner_file=scenario.options.targetRunner.value,
-                                         max_retries=scenario.options.targetRunnerRetries.value,
-                                         log_folder=scenario.options.logDir.value,
-                                         debug_level=scenario.options.debugLevel.value,
-                                         log_level=scenario.options.logLevel.value)
+    try:
+        if rank == 0:
+            # print("Master")
+            crace_cmdline(arguments=arguments, console=False, cli=cli)
+            crace.execution.mpi.broadcast_termination_signal()
+        elif rank > 0:
+            # print("Worker")
+            # TODO: Suppress output here
+            # TODO: Suppress creating of log files here
+            scenario = Scenario.from_input(arguments, silent=True)
+            crace.execution.mpi.start_worker(exec_dir=scenario.options.execDir.value,
+                                            exec_cmd=scenario.options.targetRunnerLauncher.value,
+                                            target_runner_file=scenario.options.targetRunner.value,
+                                            max_retries=scenario.options.targetRunnerRetries.value,
+                                            log_folder=scenario.options.logDir.value,
+                                            debug_level=scenario.options.debugLevel.value,
+                                            log_level=scenario.options.logLevel.value)
+    except (SystemExit, KeyboardInterrupt, Exception) as e:
+        if any(isinstance(e, cls) for cls in [x[1] for x in inspect.getmembers(CE, inspect.isclass)]):
+            pass
+        else:
+            print(f"\nERROR: There was an error while executing crace(mpi) on rank {rank}: {repr(e)}")
+            MPI.COMM_WORLD.Abort(1)
+            sys.exit(1)
 
 if __name__ == "__main__":
     """

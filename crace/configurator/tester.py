@@ -34,7 +34,8 @@ class Tester:
             os.mkdir(self.log_folder_test)
         self.experiments = Experiments(log_folder=self.log_folder_test,
                                        budget_digits=self.options.boundDigits.value,
-                                       log_level=self.options.logLevel.value)
+                                       log_level=self.options.logLevel.value,
+                                       debug_level=self.options.debugLevel.value,)
 
         self.debug_level = self.options.debugLevel.value
         self._scheduled_jobs = []

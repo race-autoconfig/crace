@@ -137,7 +137,7 @@ class Experiments:
     :ivar finished_log_file: Filename to log finished experiments
     :ivar canceled_log_file: Filename to log canceled experiments
     """
-    def __init__(self, log_folder, budget_digits:int=0, recovery_folder=None, read_folder=None, capping=False, log_level=0, configurations:Configurations=None, test_folder=None, onlytest=False):
+    def __init__(self, log_folder, budget_digits:int=0, recovery_folder=None, read_folder=None, capping=False, log_level=0, debug_level=0, configurations:Configurations=None, test_folder=None, onlytest=False):
         """
         Creates a Experiments object instance
 
@@ -191,6 +191,8 @@ class Experiments:
         self.onlytest = onlytest
 
         self.log_level = log_level
+        self.debug_level = debug_level
+
         # log files
         self.submitted_log_file = log_folder + "/exps_sub.log"
         self.finished_log_file = log_folder + "/exps_fin.log"
