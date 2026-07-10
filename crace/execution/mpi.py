@@ -143,12 +143,16 @@ class MPIExecutionMaster(MPIProcess, ExecutionMasterBase):
         # Define a set of workers and discard the main process
         mpi_logger.debug("Master sees comm with size %s", str(self.comm.Get_size()))
 
-        self.workers = set(range(self.comm.Get_size()))
-        # self.workers = set(range(number_of_workers))
-        self.workers.discard(self.comm.Get_rank())
-        self.size = self.comm.Get_size() - 1
-        if self.size == 1:
-            raise ValueError
+        if number_of_workers == self.comm.Get_size() - 1:
+            self.workers = set(range(self.comm.Get_size()))
+            self.workers.discard(self.comm.Get_rank())
+            self.size = self.comm.Get_size() - 1
+            if self.size == 1:
+                raise ValueError
+        else:
+            self.workers = set(range(number_of_workers+1))
+            self.workers.discard(self.comm.Get_rank())
+            self.size = number_of_workers
 
         self.id = MPIExecutionMaster.mpi_master_id
         MPIExecutionMaster.mpi_master_id += 1

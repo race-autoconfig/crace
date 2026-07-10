@@ -9,13 +9,14 @@ from crace.utils import get_loop
 from crace.errors import CraceError
 from crace.containers.scenario import Scenario
 from crace.containers.experiments import Experiments
+from crace.utils.affinity import print_affinity_info
 
 asyncio_logger = logging.getLogger("asyncio")
 
 
 class Tester:
     def __init__(self, scenario: Scenario):
-        print("\n\n# Initializing tester ")
+        print("#\n# Initializing tester ")
         self.options = scenario.options
         self.parameters = scenario.parameters
         self.instances = scenario.instances
@@ -50,6 +51,15 @@ class Tester:
         self.master, self._pool = execution.start_execution(self.options, self.test_callback, self.experiments, True)
 
         self.clock = time.time()
+
+        try:
+            sel_rank = self.master.workers | {0}
+            # print affinity information, before testing
+            # mpi optional
+            print_affinity_info(mpi=self.options.mpi.value, test=True, sel_rank=sel_rank)
+            print('#------------------------------------------------------------------------------', flush=True)
+        except Exception as e:
+            raise CraceError(f"There was an error while printing affinity information:\n   {e}")
 
     def do_test(self, config: dict = None):
         terminated = None

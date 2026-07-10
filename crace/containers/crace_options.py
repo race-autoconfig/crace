@@ -521,10 +521,10 @@ class CraceOptions(Reader):
 
             # print info when providing capping options
             if self.boundMax.is_set() and not self.boundMax.is_default() > 0:
-                print(f"Option {bold}boundMax{reset} must not be specified when "
+                if not silent: print(f"Option {bold}boundMax{reset} must not be specified when "
                       f"{bold}capping{reset} is disabled.")
             if self.boundDigits.is_set() and not self.boundDigits.is_default():
-                print(f"Option {bold}boundDigits{reset} must not be specified when "
+                if not silent: print(f"Option {bold}boundDigits{reset} must not be specified when "
                       f"{bold}capping{reset} is disabled.")
             # if self.boundAsTimeout.is_set() and not self.boundAsTimeout.is_default():
             #     raise OptionError(f"Option boundAsTimeout must not be specified when capping is disabled.")
@@ -542,6 +542,11 @@ class CraceOptions(Reader):
 
         if self.mpi.value and self.parallel.value < 2:
             raise OptionError(f"Option {bold}parallel{reset} must be > 1 if {bold}mpi{reset} is enabled.")
+
+        if self.mpi.value and self.testParallel.value > self.parallel.value:
+            self.testParallel.set_value(self.parallel.value)
+            if not silent: print(f"# Option {bold}testParallel{reset} must not be greater than {bold}parallel{reset} if {bold}mpi{reset} is enabled. "
+                  f"Setting {bold}testParallel{reset} to {self.parallel.value}.")
         
         if self.globalModel.value and not self.elitist.value:
             raise OptionError(f"Option {bold}elitist{reset} must be activated when option "

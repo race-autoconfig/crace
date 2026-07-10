@@ -11,16 +11,21 @@ from crace.execution.local_concurrent import ConcurrentExecutionMaster
 
 def start_execution(options, experiment_finished_callback, experiments, test: bool=False):
     # create master execution handler
-    master = start_master(options)
-    worker_num = options.parallel.value if options.parallel.value > 1 else 1
-    adaptive = options.domType.value in ("adaptive", "adaptive-dom", "adaptive-dominance", "adaptive-Dominance")
-    strict_pool = True if (adaptive or options.testExperimentSize.value > 1) and not test else False
-    bound_out = True if options.capping.value and options.boundAsTimeout.value else False
+    master = start_master(options, test)
 
     # create and set pool
     # if options.targetEvaluator.value is None:
     if options.debugLevel.value >= 3:
         print("# Initializing execution pool")
+
+    if test:
+        worker_num = options.testParallel.value if options.testParallel.value > 1 else 1
+    else:
+        worker_num = options.parallel.value if options.parallel.value > 1 else 1
+
+    adaptive = options.domType.value in ("adaptive", "adaptive-dom", "adaptive-dominance", "adaptive-Dominance")
+    strict_pool = True if (adaptive or options.testExperimentSize.value > 1) and not test else False
+    bound_out = True if options.capping.value and options.boundAsTimeout.value else False
 
     pool = ExecutionPool(chainMap=collections.ChainMap(),
                          executioner=master,
@@ -79,15 +84,20 @@ async def stop_execution_checking(master, pool):
     await asyncio.sleep(0)  # TODO: Check that the executioner did shut down
     print("#\n# Checking complete")
 
-def start_master(options):
+def start_master(options, test:bool=False):
     """
     Call this method from the MPI process that is supposed to take on the role of the master.
     :return: The MPIMaster object, created by this method
     """
-    if options.parallel.value == 0:
-        n_parallel = 1
+    # if options.parallel.value == 0:
+    #     n_parallel = 1
+    # else:
+    #     n_parallel = options.parallel.value
+
+    if test:
+        n_parallel = options.testParallel.value if options.testParallel.value > 1 else 1
     else:
-        n_parallel = options.parallel.value
+        n_parallel = options.parallel.value if options.parallel.value > 1 else 1
 
     target_runner_file = options.targetRunner.value
     max_retries = options.targetRunnerRetries.value

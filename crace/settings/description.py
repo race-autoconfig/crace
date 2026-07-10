@@ -138,12 +138,18 @@ A BibTeX entry for LaTeX users is
 
 _VERSION = "1.0"
 update_logs = """
-Based on commit 50ee278 (tag: v1.0.0.post1)
+Based on tag: v1.0.1
 
 - src:
-  - main.py, mpi.py, utils.py:
-    - improve error handling in start_cmdline(), start_mpi() and _enforce_single_thread_binding()
-    - support single cpu binding in _enforce_single_thread_binding()
+  - options: add integer option testParallel
+    - value 0: disable parallelization in testing phase
+    - value > 1: enable parallelization in testing phase (must be <= parallel)
+
+  - main.py
+    - add print_affinity_info() when parallel > 1 (mpi disabled)
+
+-pkg:
+  - add changelog.md
 
 """
 

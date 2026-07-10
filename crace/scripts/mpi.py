@@ -29,13 +29,19 @@ import crace.errors as CE
 import crace.execution.mpi
 from crace.scripts.main import crace_cmdline
 from crace.containers.scenario import Scenario
-from crace.scripts.utils import _check_mpi_env, _get_binding_flag, _enforce_single_thread_binding, _print_affinity_info
+from crace.utils.affinity import check_mpi_env, get_binding_flag, enforce_single_thread_binding, print_affinity_info
 
 def start_mpi(args=None, cli: bool=False):
     """
     start crace with mpi4py
     """
-    MPI, comm, rank = _check_mpi_env()
+    MPI = None
+    
+    if not MPI:
+        MPI, _, _ = check_mpi_env()
+
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
 
     if cli:
         arguments = args
@@ -43,10 +49,9 @@ def start_mpi(args=None, cli: bool=False):
         arguments = sys.argv[1:]  # command line arguments as a list
 
     try:
-
-        if _get_binding_flag(arguments):
-            _enforce_single_thread_binding(MPI, comm, rank)    # load option bind-cores from arguments
-        _print_affinity_info(comm, rank)        # print affinity information in order
+        if get_binding_flag(arguments):
+            enforce_single_thread_binding(MPI, comm, rank)     # load option bind-cores from arguments
+        print_affinity_info(mpi=True, MPI=MPI)    # print affinity information in order, mpi and called before training
 
     except Exception as e:
         if rank == 0:

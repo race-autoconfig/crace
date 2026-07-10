@@ -5,7 +5,7 @@
 [![PyPI](https://img.shields.io/pypi/v/crace?cacheSeconds=3600)][crace-pycode]
 [![Python](https://img.shields.io/pypi/pyversions/crace?cacheSeconds=3600)][crace-pycode]
 [![Docs](https://img.shields.io/badge/docs-online-blue?cacheSeconds=3600)][crace-homepage]
-[![License](https://img.shields.io/github/license/race-autoconfig/crace?cacheSeconds=3600)](docs/references/LICENSE.md)
+[![License](https://img.shields.io/github/license/race-autoconfig/crace?cacheSeconds=3600)](docs/references/license.md)
 <!-- badge end -->
 
 <!-- link start -->

@@ -458,8 +458,20 @@
     "domain": "(0,999999999)",
     "section": "Target algorithm execution",
     "critical": 1,
-    "description": "Number of calls to execute targetRunner in parallel. Values 0 or 1 mean no parallelization.",
-    "vignettes": "Number of calls of the \u001b[4mtargetRunner\u001b[0m to be executed in parallel. Values 0 or 1 mean no parallelization. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:parallel>\u001b]8;;\u001b\\ for more details."
+    "description": "Number of calls to execute targetRunner in parallel in training phase. Values 0 or 1 mean no parallelization.",
+    "vignettes": "Number of calls of the \u001b[4mtargetRunner\u001b[0m to be executed in parallel in training phase. Values 0 or 1 mean no parallelization. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:parallel>\u001b]8;;\u001b\\ for more details."
+  },
+  {
+    "name": "testParallel",
+    "type": "i",
+    "short": "",
+    "long": "--test-parallel",
+    "default": 0,
+    "domain": "(0,999999999)",
+    "section": "Target algorithm execution",
+    "critical": 1,
+    "description": "Number of calls to execute targetRunner in parallel in testing phase. Values 0/1 means no parallelization and it must not be greater than parallel.",
+    "vignettes": "Number of calls of the \u001b[4mtargetRunner\u001b[0m to be executed in parallel in testing phase. Values 0 and 1 mean no parallelization and it must not be greater than parallel. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:parallel>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "mpi",

@@ -23,7 +23,7 @@ Source: [`authors and citiation`](./authors.md)
 License
 -------
 
-Source: [`License`](./LICENSE.md)
+Source: [`License`](./license.md)
 
 This program is free software (software libre): you can redistribute it and/or 
 modify it under the terms of the GNU General Public License as published by the 
@@ -40,4 +40,3 @@ appropriate credit! If you write a scientific paper describing research that
 made substantive use of this program, it is your obligation as a scientist to 
 (a) mention the fashion in which this software was used in the Methods section; 
 (b) mention the algorithm in the References section. 
-

@@ -14,7 +14,8 @@ import crace.errors as CE
 from crace.configurator.tester import Tester
 from crace.containers.scenario import Scenario
 from crace.configurator.crace import Crace, Check
-from crace.scripts.utils import _check_scenario_parameters
+from crace.scripts.utils import check_scenario_parameters
+from crace.utils.affinity import print_affinity_info
 
 asyncio_logger = logging.getLogger("asyncio")
 
@@ -23,6 +24,9 @@ def start_crace(scenario, console: bool=False):
     """
     Main procedure to start crace
     """
+    if not scenario.options.mpi.value and scenario.options.parallel.value > 1:
+        print_affinity_info(mpi=False)     # print affinity information, no mpi and called before training
+
     data = None
     # change to exech directory if provided
     if scenario.options.debugLevel.value >=1:
@@ -72,7 +76,7 @@ def crace_main(scenario: Scenario=None, scenario_file=None, console=False):
         if scenario is None:
             scenario = Scenario.from_input(scenario_file=scenario_file, console=console)
         else:
-            _check_scenario_parameters(scenario)
+            check_scenario_parameters(scenario)
 
         start_crace(scenario)
 
