@@ -2,8 +2,6 @@
 
 ## crace 1.0
 
-
-
 ### crace 1.1.0
 
 > Based on tag: v1.0.1
@@ -22,7 +20,6 @@
 > (Yunshuang Xiao)
 
 
-
 ### crace 1.0.1
 
 > Based on tag: v1.0.0.post1
@@ -33,7 +30,6 @@
 >     - support single cpu binding in `_enforce_single_thread_binding()`
 >
 > (Yunshuang Xiao)
-
 
 
 ### crace 1.0.0.post1
@@ -55,15 +51,11 @@
 > (Yunshuang Xiao)
 
 
-
-
 ### No tag (**commit**: 0686d51)
 
 > modified gh-pages.yml
 >
 > (Yunshuang Xiao)
-
-
 
 
 ### crace1.0.0.post0 
@@ -96,13 +88,11 @@
 > (Yunshuang Xiao)
 
 
-
-
 ### crace 1.0.0
 
 > The first public version: v1.0.0
 > 
-> (Yunshuang Xiao)
+> (Leslie Pérez Cáceres, Jonas Kuckling, Pablo Contreras and Yunshuang Xiao)
 
 
 
