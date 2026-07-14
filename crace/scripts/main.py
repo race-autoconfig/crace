@@ -89,7 +89,7 @@ def crace_main(scenario: Scenario=None, scenario_file=None, console=False):
             err_info = traceback.format_exc()
             print(err_info)
 
-def start_cmdline(arguments=None, console: bool=True):
+def start_cmdline(arguments=None, console: bool=True, mpi: bool=False):
     """
     Function that executes the configuration procedure with arguments from the command line
     """
@@ -122,7 +122,7 @@ def start_cmdline(arguments=None, console: bool=True):
             print(e)
 
     if not console:
-        print("\nExiting crace. (Ignore the following 'MPI_ABORT' messages if appearing.)")
+        if mpi: print("\nExiting crace. (Ignore the following 'MPI_ABORT' messages if appearing.)")
         sys.exit(1)
     else: return data
 
@@ -134,7 +134,7 @@ def run(*inputs):
     arguments = [str(x) for x in arguments]
     return crace_cmdline(arguments=arguments)
 
-def crace_cmdline(arguments: list=None, console: bool=True, cli: bool=False):
+def crace_cmdline(arguments: list=None, console: bool=True, cli: bool=False, mpi: bool=False):
     """
     Allowed to be called: 1. by entry point, 
                           2. by crace_mpi 
@@ -151,7 +151,7 @@ def crace_cmdline(arguments: list=None, console: bool=True, cli: bool=False):
         # arguments may be [] (not None)
         arguments = sys.argv[1:] # command line arguments as a list
 
-    data = start_cmdline(arguments, console)
+    data = start_cmdline(arguments, console, mpi)
 
     if data: return data
 

@@ -47,14 +47,26 @@ def _get_version():
         pass
 
     try:
+        commit = None
         if os.path.exists(dest_git_dir):
             head = (dest_git_dir / "HEAD").read_text().strip()
+            packed_tag = dest_git_dir / "packed-refs"
 
             if head.startswith("ref:"): 
                 ref = head.split(" ", 1)[1]
-                return (dest_git_dir / ref).read_text().strip()[:6]
+                try:
+                    commit = (dest_git_dir / ref).read_text().strip()[:7]
+                except Exception:
+                    for t in packed_tag.read_text().splitlines():
+                        if t.startswith("#"): continue
+                        s, r = t.split(" ", 1)
+                        if r.strip() == ref:
+                            commit = s[:7]
             else:
-                return head[:6]
+                commit = head[:7]
+
+            if commit: return commit
+
     except Exception:
         pass
 
@@ -138,11 +150,11 @@ A BibTeX entry for LaTeX users is
 
 _VERSION = "1.0"
 update_logs = """
-Bug fixes: error handling
+Bug fixes
 
 - src:
-  - options: check scenario argument if provided by user
-  - mpi.py: improve error handling
+  - root/__init__: run and main not found error in python console
+  - scripts/mpi and scripts/main: notice info when mpi is disabled
 
 """
 

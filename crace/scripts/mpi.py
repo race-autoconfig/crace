@@ -61,7 +61,7 @@ def start_mpi(args=None, cli: bool=False):
     try:
         if rank == 0:
             # print("Master")
-            crace_cmdline(arguments=arguments, console=False, cli=cli)
+            crace_cmdline(arguments=arguments, console=False, cli=cli, mpi=True)
             crace.execution.mpi.broadcast_termination_signal()
         elif rank > 0:
             # print("Worker")

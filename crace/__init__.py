@@ -1,8 +1,8 @@
 # crace/__init__.py
 
 _IMPORT_MAPPING = {
-    'run': 'crace.scripts.run',
-    'main': 'crace.scripts.crace_main',
+    'run': 'crace.scripts',
+    'main': 'crace.scripts',
     'Reader': 'crace.utils',
     'Scenario': 'crace.containers.scenario',
     'Parameters': 'crace.containers.parameters',
