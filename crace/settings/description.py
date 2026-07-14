@@ -138,18 +138,11 @@ A BibTeX entry for LaTeX users is
 
 _VERSION = "1.0"
 update_logs = """
-Based on tag: v1.0.1
+Bug fixes: error handling
 
 - src:
-  - options: add integer option testParallel
-    - value 0: disable parallelization in testing phase
-    - value > 1: enable parallelization in testing phase (must be <= parallel)
-
-  - main.py
-    - add print_affinity_info() when parallel > 1 (mpi disabled)
-
--pkg:
-  - add changelog.md
+  - options: check scenario argument if provided by user
+  - mpi.py: improve error handling
 
 """
 

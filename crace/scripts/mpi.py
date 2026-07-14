@@ -56,7 +56,7 @@ def start_mpi(args=None, cli: bool=False):
     except Exception as e:
         if rank == 0:
             print(f"\n! ERROR: There was an error while pining processors:\n!   {e}")
-        MPI.COMM_WORLD.Abort(1)
+            MPI.COMM_WORLD.Abort(1)
 
     try:
         if rank == 0:
@@ -76,15 +76,16 @@ def start_mpi(args=None, cli: bool=False):
                                             debug_level=scenario.options.debugLevel.value,
                                             log_level=scenario.options.logLevel.value)
     except (SystemExit, KeyboardInterrupt, Exception) as e:
-        if any(isinstance(e, cls) for cls in [x[1] for x in inspect.getmembers(CE, inspect.isclass)]):
-            pass
-        if isinstance(e, KeyboardInterrupt) or isinstance(e, SystemExit):
-            pass
-        else:
-            print(f"\n! ERROR: There was an error while executing crace(mpi) on rank {rank}: {repr(e)}")
-            traceback.print_exc()
-        MPI.COMM_WORLD.Abort(1)
-        sys.exit(1)
+        if rank == 0:
+            if any(isinstance(e, cls) for cls in [x[1] for x in inspect.getmembers(CE, inspect.isclass)]):
+                pass
+            if isinstance(e, KeyboardInterrupt) or isinstance(e, SystemExit):
+                pass
+            else:
+                print(f"\n! ERROR: There was an error while executing crace(mpi) on rank {rank}: {repr(e)}")
+                traceback.print_exc()
+            MPI.COMM_WORLD.Abort(1)
+            sys.exit(1)
 
 if __name__ == "__main__":
     """

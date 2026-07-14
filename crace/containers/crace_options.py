@@ -218,11 +218,11 @@ class CraceOptions(Reader):
         # check if there is a scenario file in the arguments
         if self.scenarioFile.long in arguments:
             i = arguments.index(self.scenarioFile.long)
-            self.scenarioFile.set_value(arguments[i+1])
+            self.scenarioFile.set_value(arguments[i+1], check_file=True)
 
         elif self.scenarioFile.short in arguments:
             i = arguments.index(self.scenarioFile.short)
-            self.scenarioFile.set_value(arguments[i+1])
+            self.scenarioFile.set_value(arguments[i+1], check_file=True)
 
         # check if there is a recovery file in the arguments
         elif self.recoveryDir.long in arguments or self.recoveryDir.short in arguments:
@@ -239,9 +239,7 @@ class CraceOptions(Reader):
 
         # the default scenario file does not exist
         elif scenario_file is not None:
-            self.scenarioFile.set_value(scenario_file)
-            if not self.scenarioFile.exists_file():
-                raise OptionError(f"The provided scenario file {scenario_file} is not readable or does not exist.")
+            self.scenarioFile.set_value(scenario_file, check_file=True)
 
         else:
             # in this case, we remove the scenario file and assume parameters will be handled manually
