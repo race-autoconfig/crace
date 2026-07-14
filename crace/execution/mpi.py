@@ -92,6 +92,7 @@ class MPIProcess(ABC):
 
     TERMINATE_JOB = "TERMINATE_JOB"
     SHUTDOWN_WORKER = "SHUTDOWN_WORKER"
+    DEACTIVATE_WORKER = "DEACTIVATE_WORKER"
     SEND_JOB = "SEND_JOB"
     INIT = "INIT"
 
@@ -143,22 +144,26 @@ class MPIExecutionMaster(MPIProcess, ExecutionMasterBase):
         # Define a set of workers and discard the main process
         mpi_logger.debug("Master sees comm with size %s", str(self.comm.Get_size()))
 
+        mpi_workers = set(range(self.comm.Get_size()))
+        mpi_workers.discard(self.comm.Get_rank())
+
         if number_of_workers == self.comm.Get_size() - 1:
-            self.workers = set(range(self.comm.Get_size()))
-            self.workers.discard(self.comm.Get_rank())
+            self.workers = mpi_workers
             self.size = self.comm.Get_size() - 1
             if self.size == 1:
                 raise ValueError
         else:
-            self.workers = set(range(number_of_workers+1))
-            self.workers.discard(self.comm.Get_rank())
+            self.workers = set(sorted(mpi_workers)[:number_of_workers])
             self.size = number_of_workers
 
         self.id = MPIExecutionMaster.mpi_master_id
         MPIExecutionMaster.mpi_master_id += 1
 
-        for worker in self.workers:
-            self.comm.send([MPIProcess.INIT], dest=worker)
+        for worker in mpi_workers:
+            if worker in self.workers:
+                self.comm.send([MPIProcess.INIT], dest=worker)
+            else:
+                self.comm.send([MPIProcess.DEACTIVATE_WORKER], dest=worker)
 
         self.running_jobs = {}  # this is a dictionary that keeps
         #                         the experiment_id as key and
@@ -605,6 +610,9 @@ class MPIExecutionWorker(ExecutionWorkerBase, MPIProcess):
         elif keyword == MPIProcess.SHUTDOWN_WORKER:
             asyncio.get_event_loop().call_soon(self._shutdown)
 
+        elif keyword == MPIProcess.DEACTIVATE_WORKER:
+            self._shutdown()
+
         elif keyword == MPIProcess.SEND_JOB:
             experiment = message[0]  # it seems that message is wrapped once in an array. This removes the outer wrap
             mpi_logger.debug(f"Worker {self.comm.Get_rank()} has received experiment "
@@ -618,9 +626,12 @@ class MPIExecutionWorker(ExecutionWorkerBase, MPIProcess):
             # resubmit this method to the event loop
             event_loop.create_task(self._async_listen())
         else:
-            await asyncio.sleep(1)
-            # stop the loop
-            asyncio.get_event_loop().stop()
+            if keyword == MPIProcess.DEACTIVATE_WORKER:
+                return
+            else:
+                await asyncio.sleep(1)
+                # stop the loop
+                asyncio.get_event_loop().stop()
 
 
     def run(self):

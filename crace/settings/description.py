@@ -150,11 +150,12 @@ A BibTeX entry for LaTeX users is
 
 _VERSION = "1.0"
 update_logs = """
-Bug fixes
+MPI improvement
 
 - src:
-  - root/__init__: run and main not found error in python console
-  - scripts/mpi and scripts/main: notice info when mpi is disabled
+  - mpi.py: 
+    - Add a new keyword DEACTIVATE_WORKER to the MPIProcess class to allow deactivating workers
+    - improve worker command in MPIExecutionMaster to deactivate workers that are not used in current phase
 
 """
 
