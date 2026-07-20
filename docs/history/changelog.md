@@ -2,6 +2,27 @@
 
 ## crace 1.0
 
+### crace 1.1.1
+
+> MPI improvement and bug fixes
+>
+> - src:
+>   - mpi.py:
+>       - Add a new keyword DEACTIVATE_WORKER to the MPIProcess class to allow deactivating workers
+>       - improve worker command in MPIExecutionMaster to deactivate workers that are not used in current phase
+>
+>   - root/__init__: run and main not found error in python console
+>   - scripts/mpi and scripts/main: notice info when mpi is disabled
+>
+>   - options: check scenario argument if provided by user
+>   - mpi.py: improve error handling
+
+### crace 1.1.0.post0
+
+> update changelog
+>
+> (Yunshuang XIAO)
+
 ### crace 1.1.0
 
 > Based on tag: v1.0.1
@@ -47,13 +68,6 @@
 >       - installed MPI implementation or not
 >       - mpi.py called by MPI launcher or not
 >     - improve the output of cpu affinity for mpi executions
->
-> (Yunshuang Xiao)
-
-
-### No tag (**commit**: 0686d51)
-
-> modified gh-pages.yml
 >
 > (Yunshuang Xiao)
 

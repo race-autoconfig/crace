@@ -11,7 +11,7 @@ import importlib
 import pandas as pd
 
 import crace.settings.description as csd
-from crace.utils.const import bold, underline, reset
+from crace.utils.const import bold, underline, reset, WIDTH
 from crace.utils import Reader, ConditionalReturn, get_logger, format_string
 from crace.errors import OptionError, FileError, ExitError
 from crace.containers.crace_option import IntegerOption, RealOption, StringOption, BooleanOption, FileOption, \
@@ -205,7 +205,7 @@ class CraceOptions(Reader):
 
         # specific option called in craceplot
         if not silent and not self.readLogsInCplot.long in arguments:
-            print('#------------------------------------------------------------------------------')
+            print(f"#{f'':-^{WIDTH-1}}")
             print("# Arguments: {}".format(self.arguments))
             print("# Reading crace options..")
 
@@ -481,7 +481,7 @@ class CraceOptions(Reader):
             self.check_executable_cmdline(cmd, file)
         elif self.targetRunner.is_set():
             self.targetRunner.check_executable(True)
-            self.targetRunnerLauncher.set_value(None, False)
+            self.targetRunnerLauncher.set_value(None)
 
         # check budgets
         if not self.maxExperiments.is_set() or self.maxExperiments.value == 0:
@@ -593,29 +593,44 @@ class CraceOptions(Reader):
         with open(filename, "r") as read_file:
             all_options = json.loads(read_file.read(), object_hook=option_decoder)
 
-        options = []
+        from collections import defaultdict
+        groups = defaultdict(list)
         for o in all_options:
-            if o.critical > 1:
-                continue
-            options.append(o.name)
+            if o.critical > 1: continue
+            groups[o.section].append(o)
 
-            print(f"{bold}# Name:{reset} {o.name}")
-            print(f"  {bold}Long:{reset} {o.long if o.long else 'None'}")
-            print(f"  {bold}Short:{reset} {o.short if o.short else 'None'}")
-            if o.type in ['i', 's']:
-                print(f"  {bold}Domain:{reset} {o.domain if o.domain else 'None'}")
-            if o.default is not None and o.default != "" and o.default != []:
-                print(f"  {bold}Default:{reset} {o.default}")
-            else:
-                print(f"  {bold}Default:{reset} None")
-            print(f"""{format_string(f"{bold}Description:{reset} {o.description}")}""")
-            print(f"""{format_string(f"{bold}Vignettes:{reset} {o.vignettes}")}""")
-            print()
+        # groups = {section: sorted(options, key=lambda x: x.name)
+        #           for section, options in sorted(groups.items(), key=lambda x: x[0])}
+
+        options = []
+        for section, options_list in groups.items():
+            print(f"\n  {f' {section.upper()} ':=^{WIDTH-4}}\n")
+
+            for o in options_list:
+                if o.critical > 1:
+                    continue
+                options.append(o.name)
+
+                print(f"{bold}# Name:{reset} {o.name}")
+                print(f"  {bold}Long:{reset} {o.long if o.long else 'None'}")
+                print(f"  {bold}Short:{reset} {o.short if o.short else 'None'}")
+                if o.type in ['i', 's']:
+                    print(f"""  {format_string(f"{bold}Domain:{reset} {o.domain if o.domain else 'None'}", hanging=2)}""")
+                if o.default is not None and o.default != "" and o.default != []:
+                    print(f"  {bold}Default:{reset} {o.default}")
+                else:
+                    print(f"  {bold}Default:{reset} None")
+                if o.description:
+                    print(f"""  {format_string(f"{bold}Description:{reset} {o.description}", hanging=2)}""")
+                if o.vignettes:
+                    print(f"""  {format_string(f"{bold}Vignettes:{reset} {o.vignettes}", hanging=2, space=True)}""")
+                print()
 
         print(f'\n# call with {bold}--man [option_name]{reset} to check the details of specified option')
-        print('#------------------------------------------------------------------------------')
+        print(f"#{f'':-^{WIDTH-1}}")
 
     def print_help_short(self):
+
         self.print_crace_header()
 
         package_dir= os.path.dirname(os.path.dirname(__file__))
@@ -623,14 +638,33 @@ class CraceOptions(Reader):
         with open(filename, "r") as read_file:
             all_options = json.loads(read_file.read(), object_hook=option_decoder)
 
-        options = []
+        from collections import defaultdict
+        groups = defaultdict(list)
         for o in all_options:
-            if o.critical > 1:
-                continue
-            options.append(o.name)
-            print("# {:<25}{:<5}{}".format(o.name, o.short,o.long))
+            if o.critical > 1: continue
+            groups[o.section].append(o)
+
+        # groups = {section: sorted(options, key=lambda x: x.name)
+        #           for section, options in sorted(groups.items(), key=lambda x: x[0])}
+
+        max_name_l = max([len(o.name) for o in all_options if o.critical <= 1])
+        max_short_l = max([len(o.short) for o in all_options if o.critical <= 1])
+        max_long_l = max([len(o.long) for o in all_options if o.critical <= 1])
+        sum_max_l = sum([max_name_l, max_short_l, max_long_l])
+
+        options = []
+        for section, options_list in groups.items():
+            print(f"# {bold}{section}{reset}")
+
+            for o in options_list:
+                if o.critical > 1:
+                    continue
+                options.append(o.name)
+                format_de = format_string(o.description, width=WIDTH*1.2, hanging=sum_max_l+5) if o.description else ""
+                print(f"  {o.name:<{max_name_l+1}}{o.short:<{max_short_l+1}}{o.long:<{max_long_l+1}}{format_de}")
+            print()
         print(f'\n# call with {bold}--man [option_name]{reset} to check the details of specified option')
-        print('#------------------------------------------------------------------------------')
+        print(f"#{f'':-^{WIDTH-1}}")
 
     def print_man(self, o):
         """
@@ -647,13 +681,13 @@ class CraceOptions(Reader):
         print(f"{bold}Long:{reset} {o.long if o.long else 'None'}")
         print(f"{bold}Short:{reset} {o.short if o.short else 'None'}")
         if o.type in ['i', 's']:
-            print(f"{bold}Domain:{reset} {o.domain if o.domain else 'None'}")
+            print(f"""\n{format_string(f"{bold}Domain:{reset} {o.domain if o.domain else 'None'}", hanging=0)}\n""")
         if o.default is not None and o.default != "" and o.default != []:
             print(f"{bold}Default:{reset} {o.default}")
         else:
             print(f"{bold}Default:{reset} None")
         print(f"""\n{format_string(f"{bold}Description:{reset} {o.description}", hanging=0)}\n""")
-        print(f"""{format_string(f"{bold}Vignettes:{reset} {o.vignettes}", hanging=0)}""")
+        print(f"""{format_string(f"{bold}Vignettes:{reset} {o.vignettes}", hanging=0, space=True)}""")
 
     def print_version_long(self):
         self.print_crace_header()
@@ -769,7 +803,7 @@ class CraceOptions(Reader):
         print(f"# Copied templates from package {bold}crace{reset} to {destination}")
 
     def print_crace_header(self):
-        print('#------------------------------------------------------------------------------')
+        print(f"#{f'':-^{WIDTH-1}}")
         print(f'# {csd.description}')
         print(f'# Version: {csd.version}')
         print(f'# {csd.copyright}')
@@ -790,9 +824,9 @@ class CraceOptions(Reader):
         CRACE_HOME = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
         print(f'# installed at: {CRACE_HOME}')
         if self.arguments: print(f'# called with: {" ".join(self.arguments)}')
-        print('#------------------------------------------------------------------------------')
+        print(f"#{f'':-^{WIDTH-1}}")
 
     def print_cite_info(self):
-        cit = format_string(csd.citiation, width=100, hanging=0, space=True)
+        cit = format_string(csd.citiation, width=WIDTH, hanging=0, space=True)
         print("\n".join(f"# {line}" for line in cit.splitlines()))
-        print('#------------------------------------------------------------------------------')
+        print(f"#{f'':-^{WIDTH-1}}")

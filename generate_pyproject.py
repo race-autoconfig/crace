@@ -176,6 +176,7 @@ crace = [
 [tool.setuptools_scm]
 version_scheme = "post-release"
 write_to = "crace/_version.py"
+fallback_version = "{csd['_VERSION']}"
 
 """
 

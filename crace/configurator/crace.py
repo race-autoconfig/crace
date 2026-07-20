@@ -3,6 +3,7 @@ import asyncio
 import logging
 
 import crace.execution as execution
+from crace.utils.const import WIDTH
 from crace.race.race import Race, RaceCheck
 from crace.containers.scenario import Scenario
 from crace.containers.instances import Instances
@@ -99,7 +100,7 @@ def print_options(options: CraceOptions, parameters: Parameters, instances: Inst
     # FIXME: check what we want to display here
     if full:
         options.print_all()
-        print('#------------------------------------------------------------------------------')
+        print(f"#{f'':-^{WIDTH-1}}")
     else:
         options.print_selects()
-        print('#------------------------------------------------------------------------------')
+        print(f"#{f'':-^{WIDTH-1}}")

@@ -2,6 +2,8 @@ import os
 import sys
 import socket
 
+from crace.utils.const import WIDTH
+
 def check_mpi_env(check_flag=1):
     """
     check mpi environment
@@ -45,7 +47,7 @@ def check_mpi_env(check_flag=1):
         sys.exit(1)
 
     if rank == 0:
-        print('#------------------------------------------------------------------------------', flush=True)
+        print(f"#{f'':-^{WIDTH-1}}", flush=True)
         print(f"# Python version: {sys.version.split()[0]}", flush=True)
         print(f"# Installed mpi4py version: {mpi4py_version}", flush=True)
         print(f"# Detected MPI library version: {mpilib_version}", flush=True)
@@ -273,7 +275,7 @@ def _print_affinity_msg(all_msg, msg_dict):
     """
     print the affinity information in a formatted way
     """
-    print('#------------------------------------------------------------------------------', flush=True)
+    print(f"#{f'':-^{WIDTH-1}}", flush=True)
     print(f"# CPU Affinity Information:", flush=True)
     for msg in sorted(all_msg, key=lambda x: x["Rank"]):
         for k in msg:

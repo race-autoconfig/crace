@@ -3,6 +3,11 @@
 _IMPORT_MAPPING = {
     'run': 'crace.scripts',
     'main': 'crace.scripts',
+    'doc': 'crace.scripts.utils',
+    'examples': 'crace.scripts.utils',
+    'templates': 'crace.scripts.utils',
+    'which': 'crace.scripts.utils',
+    'where': 'crace.scripts.utils',
     'Reader': 'crace.utils',
     'Scenario': 'crace.containers.scenario',
     'Parameters': 'crace.containers.parameters',
@@ -34,7 +39,14 @@ def __getattr__(name: str):
         module = importlib.import_module(_IMPORT_MAPPING[name])
 
         if name == 'main':
-            return getattr(module, 'crace_main')        
+            return getattr(module, 'crace_main')
+        if name == 'doc':
+            return getattr(module, 'crace_guide')
+        if name in ("examples", "templates", "which", "where"):
+            func = getattr(module, 'crace_examples')
+            def wrapper():
+                return func(name)
+            return wrapper
         return getattr(module, name)
 
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")

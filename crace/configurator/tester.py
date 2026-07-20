@@ -10,6 +10,7 @@ from crace.errors import CraceError
 from crace.containers.scenario import Scenario
 from crace.containers.experiments import Experiments
 from crace.utils.affinity import print_affinity_info
+from crace.utils.const import WIDTH
 
 asyncio_logger = logging.getLogger("asyncio")
 
@@ -57,7 +58,7 @@ class Tester:
             # print affinity information, before testing
             # mpi optional
             print_affinity_info(mpi=self.options.mpi.value, test=True, sel_rank=sel_rank)
-            print('#------------------------------------------------------------------------------', flush=True)
+            print(f"#{f'':-^{WIDTH-1}}", flush=True)
         except Exception as e:
             raise CraceError(f"There was an error while printing affinity information:\n   {e}")
 

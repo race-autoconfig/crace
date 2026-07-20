@@ -27,12 +27,13 @@ class Option:
        x: script file or function to be parsed. Both should be executable
        l: list option
 
-    :var critical: 0-7
+    :var critical: 0-7, -1
        0: necessary options shown in craceplot
        1: optional/necessary options not shown in craceplot
        7: developing options
        2-4: not available in current crace version, maybe available in further version
        5,6: from irace, but not available in crace
+       -1: utility options only available outside crace main program
 
     :ivar value: option value
     :ivar default: option default value
@@ -846,7 +847,6 @@ class ListOption(Option):
         super().set_general_options(obj)
 
         # other variables
-        self.domain = self.parse_domain(obj['domain'])
         self.default = self.parse_default(obj['default'])
         self.value = self.default
 
@@ -856,7 +856,7 @@ class ListOption(Option):
         """
         return self.value is not None and self.value != []
 
-    def set_value(self, value: list, check: bool = True):
+    def set_value(self, value: list):
         """
         sets the value of the option and validates it
 
@@ -864,9 +864,9 @@ class ListOption(Option):
         :return: none
         """
         if self.critical > 1 and self.critical < 7: return
-        self.value = self.parse_value(value, check)
+        self.value = self.parse_value(value)
 
-    def parse_value(self, value: list, check: bool = False):
+    def parse_value(self, value: list):
         """
         parses the option value from a string
 
@@ -877,8 +877,8 @@ class ListOption(Option):
         if value is None or value == "":
             return None
 
-        if check:
-            self.check_value(value)
+        if isinstance(value, str):
+            value = re.split(r",\s*|\s+", value)
 
         for x in reversed(value):
             if isinstance(x, str) and ',' in x:
@@ -898,46 +898,3 @@ class ListOption(Option):
             return []
         else:
             return value
-
-    def check_value(self, value):
-        """
-        checks a value is in the option domain
-
-        :param value: value to be checked
-        :return: none
-        :raises OptionError: if value is not string or value is not within domain
-        """
-        if not value:
-            return
-
-        if self.domain is None:
-            return
-
-        for v in value:
-            if v not in self.domain:
-                    raise OptionError(f"Option {underline}{self.name}{reset} value/default:"
-                                      f"{str(v)} is not within the domain ({','.join(self.domain)})")
-
-    def parse_domain(self, domain: str):
-        """
-        parses the domain of an option
-
-        :param domain: string that defines the domain in the format (value1, value2, value3, ...)
-        :return: returns a list of size N  with the different values [value1, value2, value3, ..., valueN]
-        :raises OptionError: if the provided domain has repeated values or is empty
-        """
-        if not domain is None:
-            d = domain.strip("()").split(",")
-            # TODO: how to validate string crace option domains when some options do not have domain
-
-            if d[0] == "":
-                return None
-
-            d = [x.strip()for x in d]
-            if len(d) > len(set(d)):
-                raise OptionError(f"Domain for string option {underline}{self.name}{reset} "
-                                  f"has repeated values in domain: {domain}")
-
-            return d
-        else:
-            return None

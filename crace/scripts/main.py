@@ -155,8 +155,14 @@ def crace_cmdline(arguments: list=None, console: bool=True, cli: bool=False, mpi
 
     if data: return data
 
+
+def main():
+    crace_cmdline(console=False)
+
 if __name__ == '__main__':
     """
     Allowed to be called only by this file
     """
-    crace_cmdline(console=False)
+    from crace.scripts.utils import crace_run   
+
+    crace_run()

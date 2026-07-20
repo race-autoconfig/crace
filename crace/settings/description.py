@@ -148,14 +148,22 @@ A BibTeX entry for LaTeX users is
 """
 
 
-_VERSION = "1.0"
+_VERSION = "1.2"
 update_logs = """
-MPI improvement
+Improvements and bug fixes on version 1.1.1
 
-- src:
-  - mpi.py: 
-    - Add a new keyword DEACTIVATE_WORKER to the MPIProcess class to allow deactivating workers
-    - improve worker command in MPIExecutionMaster to deactivate workers that are not used in current phase
+- add new utility options (doc, examples, templates, which, where, parallel) for calling crace:
+    - improve the entry point to support calling new utility options.
+    - improve the code for calling 'crace parallel': arguments are seperated by '--'.
+    - 'which' and 'where' options are for opening the crace source code root directory.
+
+- improve formatting of option information:
+    - add constant parameter WIDTH for controlling the width of all help/pkg message.
+    - improve the formatting of help message for all options.
+
+- bug fixes for list options
+
+- update user guide for crace options
 
 """
 

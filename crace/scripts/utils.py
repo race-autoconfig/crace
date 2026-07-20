@@ -86,3 +86,81 @@ def check_scenario_parameters(scenario):
         scenario.initial_configurations.configurations_file != scenario.options.configurationsFile.value):
             if debug_level > 0: print(f"Discordant value of provided configurations: set as {scenario.initial_configurations.configurations_file}")
             scenario.options.configurationsFile.set_value(scenario.initial_configurations.configurations_file)
+
+
+def crace_guide():
+    import os, sys
+    import pathlib
+    import webbrowser
+    try:
+        import crace
+        dir_crace = pathlib.Path(crace.__file__).resolve().parent
+    except:
+        dir_crace = pathlib.Path(__file__).resolve().parent.parent
+
+    guide = pathlib.Path(os.path.join(dir_crace, 'vignettes/crace-package.pdf'))
+
+    # not support system without GUI
+    if guide.exists():
+        print(guide)
+        webbrowser.open(guide.as_uri())
+    else:
+        sys.exit(1)
+
+def crace_examples(destname):
+    import os, sys
+    import pathlib
+    import platform
+    import subprocess
+
+    try:
+        import crace
+        dir_crace = pathlib.Path(crace.__file__).resolve().parent
+    except:
+        dir_crace = pathlib.Path(__file__).resolve().parent.parent
+
+    if destname in ("which", "where"):
+        destpath = pathlib.Path(dir_crace)
+        print(destpath)
+    else:
+        destpath = pathlib.Path(dir_crace / 'inst/' / destname)
+        print(destpath)
+
+    # not support system without GUI
+    system = platform.system()
+    if destpath.exists():
+        if system == "Darwin":  # macOS
+            subprocess.run(["open", destpath])
+        elif system == "Windows":
+            subprocess.run(["explorer", destpath])
+        else:  # Linux
+            subprocess.run(["xdg-open", destpath])
+    else:
+        sys.exit(1)
+
+def crace_run():
+    import sys
+
+    from crace.scripts.main import crace_cmdline
+    from crace.scripts.parallel import crace_parallel
+
+    if len(sys.argv) > 1:
+
+        if sys.argv[1] == "doc":
+            crace_guide()
+            return
+
+        if sys.argv[1].lower() in ("examples", "templates", "which", "where"):
+            crace_examples(sys.argv[1].lower())
+            return
+
+        # if sys.argv[1] == "mpi":
+        #     crace_mpi(args=sys.argv[2:], cli=True)
+        #     return
+
+        if sys.argv[1] == "parallel":
+            crace_parallel(sys.argv[2:])
+            return
+
+    crace_cmdline(arguments=sys.argv[1:], console=False)
+

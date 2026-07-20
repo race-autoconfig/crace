@@ -7,20 +7,23 @@
     "default": null,
     "domain": "",
     "critical": 7,
-    "section": "Development",
+    "section": "Development Options",
     "description": "",
     "vignettes": "HERE IS COMMENT FOR THIS DOCUMENT [critical] is the level for options. 0: options are printed when call option --check; 1: options are printed when call crace (default); 2: implemented but not perfect; 3: should be implemented but not finished; 4: may be used in the future; 5: never used in crace any more; 6: never printed for users; 7: for devolopers. \n\n[format] in this file : \\u001b[<code>m \u001b[1mbold\u001b[0m: 1 \u001b[3italic\u001b[0m: 3\u001b[4munderline\u001b[0m: 4 \u001b]8;;https://www.url.com\u001b\\url\u001b]8;;\u001b\\: '\\u001b]8;;url\\u001b\\[name]\\u001b]8;;\\u001b\\\\'"
   },
+
+
+
   {
     "name": ".help",
     "type": "e",
     "long": "--help",
     "short": "-h",
     "default": null,
-    "section": "General options",
+    "section": "Utility options",
     "critical": 1,
     "description": "Show the information of crace options.",
-    "vignettes": "Show the list of command-line options of crace. 1. brief information when call with \u001b[1m-h\u001b[0m and2. detail information when call with \u001b[1m--help\u001b[0m. 3. more details when call \u001b[1m--man [option]\u001b[0m."
+    "vignettes": "Show the list of command-line options of crace. \n\t1. brief information when call with \u001b[1m-h\u001b[0m and\n\t2. detail information when call with \u001b[1m--help\u001b[0m. \n\t3. more details when call \u001b[1m--man [option]\u001b[0m."
   },
   {
     "name": ".man",
@@ -29,10 +32,10 @@
     "short": "-m",
     "default": null,
     "domain": "",
-    "section": "General options",
+    "section": "Utility options",
     "critical": 1,
     "description": "Show details of the selected option.",
-    "vignettes": "Show details of the selected option. call with \u001b[1mpython crace --man [option]\u001b[0m"
+    "vignettes": "Show details of the selected option. call with \u001b[1mpython crace --man [option]\u001b[0m."
   },
   {
     "name": ".version",
@@ -40,11 +43,79 @@
     "short": "-v",
     "long": "--version",
     "default": null,
-    "section": "General options",
+    "section": "Utility options",
     "critical": 1,
     "description": "Show crace package version.",
-    "vignettes": "Show the version of crace. 1. brief information when call with \u001b[1m-v\u001b[0m and 2. detail information when call with \u001b[1m--version\u001b[0m."
+    "vignettes": "Show the version of crace. \n\t1. brief information when call with \u001b[1m-v\u001b[0m and \n\t2. detail information when call with \u001b[1m--version\u001b[0m."
   },
+  {
+    "name": ".doc",
+    "type": "e",
+    "short": "",
+    "long": "doc",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open the user guide. This command must be the first argument.",
+    "vignettes": "Open the user guide of crace. This command must be the first argument."
+  },
+  {
+    "name": ".examples",
+    "type": "e",
+    "short": "",
+    "long": "examples",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open examples folder. This command must be the first argument.",
+    "vignettes": "Open examples folder. This command must be the first argument."
+  },
+  {
+    "name": ".templates",
+    "type": "e",
+    "short": "",
+    "long": "templates",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open templates folder. This command must be the first argument.",
+    "vignettes": "Open templates folder. This command must be the first argument."
+  },
+  {
+    "name": ".which",
+    "type": "e",
+    "short": "",
+    "long": "which",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open crace root folder. This command must be the first argument.",
+    "vignettes": "Open crace root folder. This command must be the first argument."
+  },
+  {
+    "name": ".where",
+    "type": "e",
+    "short": "",
+    "long": "where",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open crace root folder. This command must be the first argument.",
+    "vignettes": "Open crace root folder. This command must be the first argument."
+  },
+  {
+    "name": ".craceParallel",
+    "type": "e",
+    "short": "",
+    "long": "parallel",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Execute parallel crace runs. This command must be the first argument.",
+    "vignettes": "Execute parallel crace runs. This command must be the first argument.\n\n\u001b[1mNOTE:\u001b[0m  Arguments are separated by '--': arguments before '--' configure parallel crace runs, while arguments after '--' are forwarded to crace.\n\n\u001b[1mSupport arguments:\u001b[0m \n\t-h, --help: show this help message and exit.\n\t-n, --repetitions: The number of parallel crace runs.\n\t-p, --exec-dir: The directory path for saving the parallel crace results.\n\t-t, --expname: The prefix of the folder name to save the parallel crace results.\n\t-s, --seeds: A list of seeds used for parallel crace."
+  },
+
+
   {
     "name": ".check",
     "type": "e",
@@ -62,7 +133,7 @@
     "short": "-o",
     "long": "--only-test",
     "default": null,
-    "section": "Testing",
+    "section": "General options",
     "critical": 1,
     "description": "Only test the configurations given in the file passed as argument.",
     "vignettes": "Run the configurations contained in the file provided (with option \u001b[4mconfigurationsFile\u001b[0m) as argument on the test instances. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=32\u001b\\<User Guide: sec:testing>\u001b]8;;\u001b\\ for more details."
@@ -90,30 +161,6 @@
     "vignettes": "Read data from log files of previous run and return a craceReaults object, which includes objects CraceOptions, Parameters, Configurations, Instances, Models and Experiments."
   },
   {
-    "name": "readLogsInCplot",
-    "type": "i",
-    "short": "",
-    "long": "--readlogs-in-cplot",
-    "domain": "(0,2)",    
-    "default": 0,
-    "section": "Development",
-    "critical": 7,
-    "description": "Read data from log files of previous run in plot or not.",
-    "vignettes": "Read data from log files of previous run in plot or not."
-  },
-  {
-    "name": "seed",
-    "type": "i",
-    "short": "",
-    "long": "--seed",
-    "default": null,
-    "domain": "(1,99999999999)",
-    "section": "General options",
-    "critical": 1,
-    "description": "Seed of the random number for generator (by default, generate a random seed).",
-    "vignettes": "Seed to initiallize the random number generator. The seed must be a positive integer. If the seed is \"\"or NULL, a random seed will be generated."
-  },
-  {
     "name": "debugLevel",
     "type": "i",
     "short": "-d",
@@ -122,7 +169,7 @@
     "domain": "(0,5)",
     "section": "General options",
     "critical": 1,
-    "description": "Debug level of the output of crace. Set this to 0 to silence all debug messages. Higher values provide more verbose debug messages.",
+    "description": "Debug level of the output of crace. ",
     "vignettes": "Level of information to display in the text output of crace. A value of 0 silences all debug messages. Higher values provide more verbose debug messages. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=36\u001b\\<User Guide: sec:output text>\u001b]8;;\u001b\\ for more details."
   },
   {
@@ -134,8 +181,8 @@
     "domain": "(0,5)",
     "section": "General options",
     "critical": 1,
-    "description": "Level to generate log files. When it is 0: only critical files for recovery and plotting will be generated.",
-    "vignettes": "Level to generate log files. 0: only necessary files for the recovering and plots are included. 1: plus execution_log and race_log files. 2: plus race file. 4: plus mpi log files. 5: all files."
+    "description": "Log level for generating log files.",
+    "vignettes": "Log level for generating log files. \n\t0: only necessary files for the recovering and plots are included. \n\t1: plus execution_log and race_log files. \n\t2: plus race file. \n\t4: plus mpi log files. \n\t5: all files."
   },
   {
     "name": "execDir",
@@ -156,20 +203,22 @@
     "default": ".\/race_log",
     "section": "General options",
     "critical": 1,
-    "description": "Directory to save tuning results as plain text files, either absolute path or relative to execDir.",
+    "description": "Directory to save tuning results as plain text files.",
     "vignettes": "Directory to save tuning results as plain text files. The provided path must be either an absolute path or relative to option \u001b[4mexecDir\u001b[0m. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=36\u001b\\<User Guide: sec:logs>\u001b]8;;\u001b\\ for details on the format of the plain text files."
   },
   {
-    "name": "recoveryDir",
-    "type": "p",
-    "short": "-r",
-    "long": "--recovery-dir",
-    "default": "",
-    "section": "Recovery",
+    "name": "seed",
+    "type": "i",
+    "short": "",
+    "long": "--seed",
+    "default": null,
+    "domain": "(1,99999999999)",
+    "section": "General options",
     "critical": 1,
-    "description": "Previously saved log files to recover the execution of crace, either absolute path or relative to the current directory. If empty or NULL, recovery is not performed.",
-    "vignettes": "Previously saved crace log files that should be used to recover the execution of crace; either absolute path or relative to the current directory. If empty or NULL, recovery is not performed. For more details about recovery. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=33\u001b\\<User Guide: sec:recovery>\u001b]8;;\u001b\\ for more details."
+    "description": "Seed of the random number for generator.",
+    "vignettes": "Seed to initiallize the random number generator. The seed must be a positive integer. If the seed is \"\"or NULL, a random seed will be generated."
   },
+
 
   {
     "name": "scenarioFile",
@@ -177,10 +226,10 @@
     "short": "-s",
     "long": "--scenario",
     "default": ".\/scenario.txt",
-    "section": "General options",
+    "section": "Scenario options",
     "critical": 0,
-    "description": "File that describes the configuration scenario setup and other crace settings.",
-    "vignettes": "File that contains the scenario setup and other crace options. All options listed in this section can be included in this file. Relative file-system paths specified in the scenario file are relative to the scenario file itself.See $CRACEHOME/inst/templates/ for an example. ",
+    "description": "File that describes crace options for the target algorithm.",
+    "vignettes": "File that contains the scenario setup and other crace options. All options listed in this section can be included in this file. Relative file-system paths specified in the scenario file are relative to the scenario file itself. See $CRACEHOME/inst/templates/ for an example. ",
     "man": "Path of the file that describes the configuration scenario setup and other crace settings."
   },
   {
@@ -189,21 +238,10 @@
     "short": "-p",
     "long": "--parameter-file",
     "default": ".\/parameters.txt",
-    "section": "Target algorithm parameters",
+    "section": "Scenario options",
     "critical": 0,
-    "description": "File that contains the description of the parameters of the target algorithm.",
+    "description": "File that describes parameters of the target algorithm.",
     "vignettes": "File that contains the description of the parameters of the target algorithm. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=16\u001b\\<User Guide: sec:parameters file>\u001b]8;;\u001b\\ for more details."
-  },
-  {
-    "name": "forbiddenFile",
-    "type": "p",
-    "short": "-f",
-    "long": "--forbidden-file",
-    "default": "",
-    "section": "Target algorithm parameters",
-    "critical": 0,
-    "description": "File that contains a list of logical expressions that cannot be TRUE for any evaluated configurations. If empty or NULL, do not use forbidden expressions.",
-    "vignettes": "File containing a list of logical expressions that cannot be true for any evaluated configuration. If empty or NULL, no forbidden configurations are considered. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=15\u001b\\<User Guide: sec:forbidden>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "configurationsFile",
@@ -211,21 +249,34 @@
     "short": "-i",
     "long": "--configurations-file",
     "default": "",
-    "section": "Initial configurations",
+    "section": "Scenario options",
     "critical": 0,
-    "description": "File that contains a table of initial configurations. If empty or NULL, all initial configurations are randomly generated.",
-    "vignettes": "File containing a table of initial configurations. If empty or NULL, all initial configurations will be sampled ramdonly. The provided configurations must not violate the constraints described in option \u001b[4mparameterFile\u001b[0m and \u001b[4mparameterforbiddenFile\u001b[0m.See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=23\u001b\\<User Guide: sec:initial>\u001b]8;;\u001b\\ for more details."
+    "description": "File that describes configurations for initialization or testing.",
+    "vignettes": "File containing a table of initial configurations. If empty or NULL, all initial configurations will be sampled ramdonly. The provided configurations must not violate the constraints described in option \u001b[4mparameterFile\u001b[0m and \u001b[4mforbiddenFile\u001b[0m. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=23\u001b\\<User Guide: sec:initial>\u001b]8;;\u001b\\ for more details."
   },
+  {
+    "name": "forbiddenFile",
+    "type": "p",
+    "short": "-f",
+    "long": "--forbidden-file",
+    "default": "",
+    "section": "Scenario options",
+    "critical": 0,
+    "description": "File that describes logical expressions to forbid configurations.",
+    "vignettes": "File containing a list of logical expressions that cannot be true for any evaluated configuration. If empty or NULL, no forbidden configurations are considered. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=15\u001b\\<User Guide: sec:forbidden>\u001b]8;;\u001b\\ for more details."
+  },
+
+
   {
     "name": "trainInstancesDir",
     "type": "p",
     "short": "",
     "long": "--train-instances-dir",
     "default": ".\/Instances",
-    "section": "Training instances",
+    "section": "Instances Options",
     "critical": 0,
-    "description": "Directory where training instances are located; either absolute path or relative to current directory. If no trainInstancesFiles is provided, all the files in trainInstancesDir will be listed as instances.",
-    "vignettes": "Directory where training instances are located; either absolute path or relative to current directory. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
+    "description": "Directory where training instances are located.",
+    "vignettes": "Directory where training instances are located; either absolute path or relative to current directory. If no trainInstancesFiles is provided, all the files in trainInstancesDir will be listed as instances. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "trainInstancesFile",
@@ -233,21 +284,10 @@
     "short": "",
     "long": "--train-instances-file",
     "default": "",
-    "section": "Training instances",
+    "section": "Instances Options",
     "critical": 0,
-    "description": "File that contains a list of training instances and optionally additional parameters for them. If trainInstancesDir is provided, crace will search for the files in this folder.",
-    "vignettes": "File that contains a list of instances and optionally additional parameters for them.The list of instances in option \u001b[4mtrainInstancesFile\u001b[0m is interpreted as file-system paths relative to option \u001b[4mtrainInstancesDir\u001b[0m. When using an absolute path or instances that are not files, set option \u001b[4mtrainInstancesDir=\"\"\u001b[0m. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=20\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
-  },
-  {
-    "name": "sampleInstances",
-    "type": "b",
-    "short": "",
-    "long": "--sample-instances",
-    "default": 1,
-    "section": "Internal crace options",
-    "critical": 1,
-    "description": "Randomly sample the training instances or use them in the order given.",
-    "vignettes": "Enable\/disable the sampling of the training instances. If the option \u001b[4msampleInstances\u001b[0m is disabled, the instances are used in the order provided in the \u001b[4mtrainInstancesFile\u001b[0m or in the order they are read from the \u001b[4mtrainInstancesDir\u001b[0m when \u001b[4mtrainInstancesFile\u001b[0m is not provided. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=23\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
+    "description": "File that describes training instances and optionally additional parameters.",
+    "vignettes": "File that contains a list of instances and optionally additional parameters for them. If trainInstancesDir is provided, crace will search for the files in this folder. The list of instances in option \u001b[4mtrainInstancesFile\u001b[0m is interpreted as file-system paths relative to option \u001b[4mtrainInstancesDir\u001b[0m. When using an absolute path or instances that are not files, set option \u001b[4mtrainInstancesDir=\"\"\u001b[0m. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=20\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "testInstancesDir",
@@ -255,10 +295,10 @@
     "short": "",
     "long": "--test-instances-dir",
     "default": "",
-    "section": "Testing",
+    "section": "Instances Options",
     "critical": 0,
-    "description": "Directory where testing instances are located, either absolute or relative to current directory. Instances provided for testing should be different from the training instances.",
-    "vignettes": "Directory where testing instances are located, either absolute or relative to the current directory. Instances provided for testing should be different from the training instances. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:testing>\u001b]8;;\u001b\\"
+    "description": "Directory where testing instances are located.",
+    "vignettes": "Directory where testing instances are located, either absolute or relative to the current directory. Instances provided for testing should be different from the training instances. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:testing>\u001b]8;;\u001b\\."
   },
   {
     "name": "testInstancesFile",
@@ -266,23 +306,52 @@
     "short": "",
     "long": "--test-instances-file",
     "default": "",
-    "section": "Testing",
+    "section": "Instances Options",
     "critical": 0,
-    "description": "File that contains a list of test instances and optionally additional parameters for them. Instances provided for testing should be different from the training instances.",
+    "description": "File that describes testing instances and optionally additional parameters.",
     "vignettes": "File that contains a list of test instances and optionally additional parameters for them. The list of instances in option \u001b[4mtestInstancesFile\u001b[0m is interpreted as file-system paths relative to option \u001b[4mtestInstancesDir\u001b[0m. When using an absolute path or instances that are not files, set option \u001b[4mtestInstancesDir=\"\"\u001b[0m. Instances provided for testing should be different from the training instances.See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:tesing>\u001b]8;;\u001b\\ for more details."
   },
+
+
   {
-    "name": "testNbElites",
-    "type": "i",
-    "short": "",
-    "long": "--test-num-elites",
-    "default": 1,
-    "domain": "(1,999999999)",
-    "section": "Testing",
+    "name": "recoveryDir",
+    "type": "p",
+    "short": "-r",
+    "long": "--recovery-dir",
+    "default": "",
+    "section": "Recovery options",
     "critical": 1,
-    "description": "Number of elite configurations returned by crace that will be tested if test instances are provided.",
-    "vignettes": "Number of elite configurations returned by crace that will be tested if test instances are provided. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=32\u001b\\<User Guide: sec:tesing>\u001b]8;;\u001b\\ for more details."
+    "description": "Recover crace from previous log files.",
+    "vignettes": "Previously saved crace log files that should be used to recover the execution of crace; either absolute path or relative to the current directory. If empty or NULL, recovery is not performed. For more details about recovery. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=33\u001b\\<User Guide: sec:recovery>\u001b]8;;\u001b\\ for more details."
   },
+
+
+  {
+    "name": "maxExperiments",
+    "type": "i",
+    "short": "-E",
+    "long": "--max-experiments",
+    "default": 0,
+    "domain": "(0,999999999)",
+    "section": "Budget options",
+    "critical": 0,
+    "description": "Maximum number of runs (invocations of the targetRunner).",
+    "vignettes": "The maximum number of runs (invocations of the target algorithm that is provided by option \u001b[4mtargetRunner\u001b[0m) that will be performed. It determines the maximum budget of experiments for the tuning. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=26\u001b\\<User Guide: sec:budget>\u001b]8;;\u001b\\ for more details."
+  },
+  {
+    "name": "maxTime",
+    "type": "i",
+    "short": "-T",
+    "long": "--max-time",
+    "default": 0,
+    "domain": "(0,999999999)",
+    "section": "Budget options",
+    "critical": 0,
+    "description": "Maximum total execution time budget in seconds.",
+    "vignettes": "The maximum total time in seconds for the runs of targetRunner that will be performed. When option \u001b[4mmaxTime\u001b[0m is positive, the \u001b[4mtargetRunner\u001b[0m \u001b[1mmust\u001b[0m return the execution time as its second output. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=26\u001b\\<User Guide: sec:budget>\u001b]8;;\u001b\\ for more details."
+  },
+
+
   {
     "name": "testType",
     "type": "s",
@@ -290,10 +359,10 @@
     "long": "--test-type",
     "default": "",
     "domain": "(f-test, ftest, friedman, t-test, ttest, t-test-bonferroni, t-test-bon, t-test-holm)",
-    "section": "Statistical test",
+    "section": "Elimination options",
     "critical": 1,
-    "description": "Statistical test used for elimination. Default test is always \u001b[1mF-test\u001b[0m unless capping is enabled, in which case the default test is adaptive-dom.",
-    "vignettes": "Specifies the statistical test used for elimination: \nF-test: Friedman test. \nt-test: pairwise t-tests with no correction. \nt-test-bonferroni: t-test with Bonferroni's correction for multiple comparisons. \nt-test-holm: t-test with Holm's correction for multiple comparisons. \n\nWe recommend to not use corrections for multiple comparisons because the test typically becomes too strict and the search stagnates. The default setting of parameter testType is F-test unless the option \u001b[4mcapping\u001b[0m is enabled in which case, the default setting is defined as adaptive-dom. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=27\u001b\\<User Guide: sec:stat test>\u001b]8;;\u001b\\ for more details about choosing the statistical test most appropriate for your scenario."
+    "description": "Statistical test used for elimination.",
+    "vignettes": "Specifies the statistical test used for elimination: \n\tF-test: Friedman test. \n\tt-test: pairwise t-tests with no correction. \n\tt-test-bonferroni: t-test with Bonferroni's correction for multiple comparisons. \n\tt-test-holm: t-test with Holm's correction for multiple comparisons. \n\nWe recommend to not use corrections for multiple comparisons because the test typically becomes too strict and the search stagnates. The default setting of parameter testType is F-test unless the option \u001b[4mcapping\u001b[0m is enabled in which case, the default setting is defined as adaptive-dom. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=27\u001b\\<User Guide: sec:stat test>\u001b]8;;\u001b\\ for more details about choosing the statistical test most appropriate for your scenario."
   },
   {
     "name": "domType",
@@ -302,22 +371,10 @@
     "long": "--dom-type",
     "default": "",
     "domain": "(dom, dominance, adaptive-dom, adaptive-dominance)",
-    "section": "Statistical test",
+    "section": "Elimination options",
     "critical": 1,
-    "description": "Dominance test used for elimination. Default test is always \u001b[1madaptive-dom\u001b[0m when capping is enabled. Dominance is for capping and adaptive dominance is for adaptive capping.",
-    "vignettes":"Specifies the dominance test used for elimination:dominance test is derived from capping, adaptive dominance test is derived from adaptive capping."
-  },
-  {
-    "name": "eachTest",
-    "type": "i",
-    "short": "",
-    "long": "--each-test",
-    "default": 1,
-    "domain": "(1,100)",
-    "section": "Statistical test",
-    "critical": 1,
-    "description": "Number of instances evaluated for each configuration between elimination tests.",
-    "vignettes": "Specifies how many instances are evaluated for each configuration between elimination tests."
+    "description": "Dominance test used for elimination. ",
+    "vignettes":"Specifies the dominance test used for elimination: \n\tDominance test: derived from capping. \n\tAdaptive dominance test: derived from adaptive capping. \n\nWhen option capping is enabled, its default value is adaptive dominance test. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=29\u001b\\<User Guide: sec:aggres test>\u001b]8;;\u001b\\ for more details. "
   },
   {
     "name": "firstTest",
@@ -326,10 +383,22 @@
     "long": "--first-test",
     "default": 0,
     "domain": "(1,100)",
-    "section": "Statistical test",
+    "section": "Elimination options",
     "critical": 1,
-    "description": "Number of instances evaluated before the first elimination test. It must be a multiple of \u001b[1meachTest\u001b[0m.",
+    "description": "Number of instances evaluated before the first elimination test.",
     "vignettes": "Specifies how many instances are evaluated before the first elimination test. The value of option \u001b[4mfirstTest\u001b[0m must be a multiple of the value of option \u001b[4meachTest\u001b[0m. When option \u001b[4mcapping\u001b[0m is enabled, the default value is \u001b[1m1\u001b[0m; while option \u001b[4mcapping\u001b[0m is disabled, the default value is \u001b[1m5\u001b[0m."
+  },
+  {
+    "name": "eachTest",
+    "type": "i",
+    "short": "",
+    "long": "--each-test",
+    "default": 1,
+    "domain": "(1,100)",
+    "section": "Elimination options",
+    "critical": 1,
+    "description": "Number of instances evaluated for each configuration between elimination tests.",
+    "vignettes": "Specifies how many instances are evaluated for each configuration between elimination tests."
   },
   {
     "name": "testExperimentSize",
@@ -338,7 +407,7 @@
     "long": "--test-experiment-size",
     "default": 0,
     "domain": "(0,999999999)",
-    "section": "Elimination test",
+    "section": "Elimination options",
     "critical": 1,
     "description": "Number of finished target executions should be included in one elimination test. ",
     "vignettes": "Specifies the number of finished target executions should be included in one elimination test. This option can decrease the frequency to call elimination test.The values \u001b[1m0\u001b[0m or \u001b[1m1\u001b[0m mean to call elimination test when one target execution is finished. The greater number, the lower frequency to call test."
@@ -350,22 +419,10 @@
     "long": "--confidence",
     "default": 0.95,
     "domain": "(0.01,1.00)",
-    "section": "Statistical test",
+    "section": "Elimination options",
     "critical": 1,
     "description": "Confidence level for the elimination test.",
     "vignettes": "Confidence level for the elimination test."
-  },
-  {
-    "name": "eliteRef",
-    "type": "i",
-    "short": "",
-    "long": "--elite-ref",
-    "default": 1,
-    "domain": "(1,100)",
-    "section": "Statistical test",
-    "critical": 4,
-    "description": "Number of elite configurations that should have a better performance when removing a configuration.",
-    "vignettes": "Specifies how many configurations should have a better performance when removing a configuration."
   },
   {
     "name": "targetRunner",
@@ -373,21 +430,21 @@
     "short": "-t",
     "long": "--target-runner",
     "default": ".\/target-runner",
-    "section": "Target algorithm execution",
+    "section": "Scenario options",
     "critical": 0,
-    "description": "Script called for each configuration that executes the target algorithm to be tuned. See templates.",
-    "vignettes": "Define a script that evaluates a configuration of the target algorithm on a particular instance. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=19\u001b\\<User Guide: sec:runner>\u001b]8;;\u001b\\ for more details."
+    "description": "Script file for executing the target algorithm.",
+    "vignettes": "Script file that evaluates a configuration of the target algorithm on a particular instance. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=19\u001b\\<User Guide: sec:runner>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "targetRunnerLauncher",
     "type": "l",
-    "short": "-t",
+    "short": "",
     "long": "--target-runner-launcher",
     "default": null,
     "domain": "",
-    "section": "Target algorithm execution",
+    "section": "Scenario options",
     "critical": 0,
-    "description": "An executable command line called for each configuration that executes the target algorithm to be tuned. See templates.",
+    "description": "An executable command line for executing the target algorithm.",
     "vignettes": "An executable command line that call a script file using specific executable software for each configuration that executes the target algorithm on a particular instance, when \u001b[4mtargetRunner\u001b[0m cannot be executed directly. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=19\u001b\\<User Guide: sec:runner>\u001b]8;;\u001b\\ for more details."
   },
   {
@@ -397,35 +454,12 @@
     "long": "--target-runner-retries",
     "default": 0,
     "domain": "(0,10)",
-    "section": "Target algorithm execution",
+    "section": "Scenario options",
     "critical": 0,
-    "description": "Number of times to retry a call to the target algorithm if the call failed.",
-    "vignettes": "Number of times to retry a call to the target algorithm (provided by option \u001b[4mtargetRunner\u001b[0m) if the call failed."
+    "description": "Number of retries for calling the target algorithm if failed.",
+    "vignettes": "Number of times to retry a call of the target algorithm (provided by option \u001b[4mtargetRunner\u001b[0m) if failed."
   },
-  {
-    "name": "maxExperiments",
-    "type": "i",
-    "short": "-E",
-    "long": "--max-experiments",
-    "default": 0,
-    "domain": "(0,999999999)",
-    "section": "Tuning budget",
-    "critical": 0,
-    "description": "Maximum number of runs (invocations of the targetRunner) that will be performed. It determines the maximum budget of experiments for the tuning.",
-    "vignettes": "The maximum number of runs (invocations of the target algorithm that is provided by option \u001b[4mtargetRunner\u001b[0m) that will be performed. It determines the maximum budget of experiments for the tuning. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=26\u001b\\<User Guide: sec:budget>\u001b]8;;\u001b\\ for more details."
-  },
-  {
-    "name": "maxTime",
-    "type": "i",
-    "short": "-T",
-    "long": "--max-time",
-    "default": 0,
-    "domain": "(0,999999999)",
-    "section": "Tuning budget",
-    "critical": 0,
-    "description": "Maximum total execution time in seconds for the executions of targetRunner that must return two values: cost and time.",
-    "vignettes": "The maximum total time in seconds for the runs of targetRunner that will be performed.When option \u001b[4mmaxTime\u001b[0m is positive, the \u001b[4mtargetRunner\u001b[0m \u001b[1mmust\u001b[0m return the execution time as its second output. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=26\u001b\\<User Guide: sec:budget>\u001b]8;;\u001b\\ for more details."
-  },
+
   {
     "name": "digits",
     "type": "i",
@@ -433,21 +467,23 @@
     "long": "--digits",
     "default": 4,
     "domain": "(0,20)",
-    "section": "Target algorithm parameters",
+    "section": "Elimination options",
     "critical": 1,
-    "description": "Maximum number of decimal places that are significant for numerical (real) parameters.",
+    "description": "Maximum significant decimal places for real parameters.",
     "vignettes": "Maximum number of decimal places that are significant for numerical (real) parameters."
   },
+
+
   {
-     "name": "deterministic",
-     "type": "b",
-     "short": "",
-     "long": "--deterministic",
-     "default": 0,
-     "section": "Target algorithm execution",
-     "critical": 2,
-     "description": "If the target algorithm is deterministic, configurations will be evaluated only once per instance.",
-     "vignettes": "Enable\/disable deterministic target algorithm mode. If the target algorithm is deterministic, configurations will be evaluated only once per instance. If the number of instances provided is less than the value specified for the option \u001b[4mfirstTest\u001b[0m, no statistical test will be performed. If instances provided are all used, crace will be terminated.See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
+    "name": "mpi",
+    "type": "b",
+    "short": "",
+    "long": "--mpi",
+    "default": 0,
+    "section": "Parallelization options",
+    "critical": 1,
+    "description": "Enable\/disable MPI. Use mpi to execute targetRunner in parallel (the number of slaves).",
+    "vignettes": "Enable\/disable the use of package \u001b[1mmpi4py\u001b[0m to execute the targetRunner in parallel using MPI protocol.When option \u001b[4mmpi\u001b[0m is enabled, the option \u001b[4mparallel\u001b[0m is the number of slave nodes. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:parallel>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "parallel",
@@ -456,9 +492,9 @@
     "long": "--parallel",
     "default": 0,
     "domain": "(0,999999999)",
-    "section": "Target algorithm execution",
+    "section": "Parallelization options",
     "critical": 1,
-    "description": "Number of calls to execute targetRunner in parallel in training phase. Values 0 or 1 mean no parallelization.",
+    "description": "Number of calls to execute targetRunner in parallel in training phase. ",
     "vignettes": "Number of calls of the \u001b[4mtargetRunner\u001b[0m to be executed in parallel in training phase. Values 0 or 1 mean no parallelization. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:parallel>\u001b]8;;\u001b\\ for more details."
   },
   {
@@ -468,33 +504,25 @@
     "long": "--test-parallel",
     "default": 0,
     "domain": "(0,999999999)",
-    "section": "Target algorithm execution",
+    "section": "Parallelization options",
     "critical": 1,
-    "description": "Number of calls to execute targetRunner in parallel in testing phase. Values 0/1 means no parallelization and it must not be greater than parallel.",
+    "description": "Number of calls to execute targetRunner in parallel in testing phase.",
     "vignettes": "Number of calls of the \u001b[4mtargetRunner\u001b[0m to be executed in parallel in testing phase. Values 0 and 1 mean no parallelization and it must not be greater than parallel. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:parallel>\u001b]8;;\u001b\\ for more details."
   },
   {
-    "name": "mpi",
-    "type": "b",
-    "short": "",
-    "long": "--mpi",
-    "default": 0,
-    "section": "Target algorithm execution",
-    "critical": 1,
-    "description": "Enable\/disable MPI. Use mpi to execute targetRunner in parallel (the number of slaves).",
-    "vignettes": "Enable\/disable the use of package \u001b[1mmpi4py\u001b[0m to execute the targetRunner in parallel using MPI protocol.When option \u001b[4mmpi\u001b[0m is enabled, the option \u001b[4mparallel\u001b[0m is the number of slave nodes. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=31\u001b\\<User Guide: sec:parallel>\u001b]8;;\u001b\\ for more details."
-  },
-  {
-    "name": "bindcores",
+    "name": "bindCores",
     "type": "b",
     "short": "-b",
     "long": "--bind-cores",
     "default": 0,
-    "section": "Target algorithm execution",
+    "section": "Parallelization options",
     "critical": 1,
     "description": "Enable\/disable binding cores to physical node. Use bindcores to bind each worker to specific node.",
     "vignettes": "Enable\/disable the bindings of workers to correspoding cores when using paralel settings, especially on system allowed mpi tools. ONLY supported on linux."
   },
+
+
+
   {
     "name": "nbConfigurations",
     "type": "i",
@@ -520,26 +548,16 @@
     "vignettes": "Maximum number of elite configurations selected in the racing procedure. By default (when equal to 0), this value will be set as 6."
   },
   {
-    "name": "elitist",
-    "type": "b",
+    "name": "testNbElites",
+    "type": "i",
     "short": "",
-    "long": "--elitist",
-    "default": 0,
-    "section": "Elitist crace",
+    "long": "--test-num-elites",
+    "default": 1,
+    "domain": "(1,999999999)",
+    "section": "Internal crace options",
     "critical": 1,
-    "description": "Enable\/disable elitist crace. Enable means always to select the configurations with the most executions as elites.",
-    "vignettes": "Enable\/disable elitist crace.In the \u001b[1melitist\u001b[0m version of crace, only configurations having the most executions can be selected as elites, which are used for sampling new configurations or updating the models.In the elite version of crace, at most \u001b[4mmaxNbElites\u001b[0m configurations in the top of rank from elimination test will be selected as elites. "
-  },
-  {
-    "name": "globalModel",
-    "type": "b",
-    "short": "",
-    "long": "--global-model",
-    "default": 0,
-    "section": "Elitist crace",
-    "critical": 1,
-    "description": "Enable\/disable global model. Enable means always to select the global model to sample new configurations and update models.",
-    "vignettes": "Enable\/disable global model.In the \u001b[1melitist\u001b[0m version of crace, only global model is alive during the race procedure, which is used for sampling new configurations or updating the model.It can only be activated when \u001b[4mmelitist\u001b[0m is enable. "
+    "description": "Number of configurations used for testing.",
+    "vignettes": "Number of elite configurations returned by crace that will be tested if test instances are provided. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=32\u001b\\<User Guide: sec:tesing>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "modelUpdateByStep",
@@ -550,8 +568,19 @@
     "domain": "(0,999999999)",
     "section": "Internal crace options",
     "critical": 1,
-    "vignettes": "Number of times to update the model(s) in the race. The default number is based on the number of parameters of the provided scenario. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=35\u001b\\<User Guide: sec:output text>\u001b]8;;\u001b\\ for more details.",
-    "description": "Number of times to update the model(s) in the race"
+    "description": "Number of times to update the model(s) in the race.",
+    "vignettes": "Number of times to update the model(s) in the race. The default number is based on the number of parameters of the provided scenario. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=35\u001b\\<User Guide: sec:output text>\u001b]8;;\u001b\\ for more details."
+  },
+  {
+    "name": "sampleInstances",
+    "type": "b",
+    "short": "",
+    "long": "--sample-instances",
+    "default": 1,
+    "section": "Internal crace options",
+    "critical": 1,
+    "description": "Randomly shuffle training instances or keep the provided order.",
+    "vignettes": "Enable\/disable the shuffling of the training instances. If the option \u001b[4msampleInstances\u001b[0m is disabled, the instances are used in the order provided in the \u001b[4mtrainInstancesFile\u001b[0m or in the order they are read from the \u001b[4mtrainInstancesDir\u001b[0m when \u001b[4mtrainInstancesFile\u001b[0m is not provided. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=23\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "sampleInsStrict",
@@ -600,6 +629,79 @@
     "description": "The number of times of the soft restart strategy applied to avoid premature convergence of the probabilistic model.",
     "vignettes": "The number of times of the soft-restart strategy applied to avoid premature convergence of the probabilistic model. When there is no new configuration after 100 tries, the probabilistic model of alive configurations is soft restarted. The default value is \u001b[1m-1\u001b[0m, indicating an unlimited number of restart attempts. and the racing procedure will be terminated when all budgets are exhausted."
   },
+
+  {
+    "name": "elitist",
+    "type": "b",
+    "short": "",
+    "long": "--elitist",
+    "default": 0,
+    "section": "Elitist options",
+    "critical": 1,
+    "description": "Enable\/disable elitist crace. Enable means always to select the configurations with the most executions as elites.",
+    "vignettes": "Enable\/disable elitist crace.In the \u001b[1melitist\u001b[0m version of crace, only configurations having the most executions can be selected as elites, which are used for sampling new configurations or updating the models.In the elite version of crace, at most \u001b[4mmaxNbElites\u001b[0m configurations in the top of rank from elimination test will be selected as elites. "
+  },
+  {
+    "name": "globalModel",
+    "type": "b",
+    "short": "",
+    "long": "--global-model",
+    "default": 0,
+    "section": "Elitist options",
+    "critical": 1,
+    "description": "Enable\/disable global model. Enable means always to select the global model to sample new configurations and update models.",
+    "vignettes": "Enable\/disable global model.In the \u001b[1melitist\u001b[0m version of crace, only global model is alive during the race procedure, which is used for sampling new configurations or updating the model.It can only be activated when \u001b[4melitist\u001b[0m is enable. "
+  },
+
+  {
+    "name": "capping",
+    "type": "b",
+    "short": "",
+    "long": "--capping",
+    "default": 0,
+    "section": "Capping options",
+    "critical": 1,
+    "description": "Enable/disable the use of capping, a technique designed for minimizing the computation time of configurations. This is only available when elitist is active.",
+    "vignettes": "Enable/disable the use of capping, a technique designed for minimizing the computation time of configurations. This option is only available when option \u001b[4melitist\u001b[0m is activated. When enabling this option, crace provides an execution time bound to each target algorithm execution (see \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=28\u001b\\<User Guide: sec:aggres test>\u001b]8;;\u001b\\). The bound can be calculated using capping or adaptive capping. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=29\u001b\\<User Guide: sec:capping>\u001b]8;;\u001b\\ for more details. "
+  },
+  {
+    "name": "boundMax",
+    "type": "r",
+    "short": "",
+    "long": "--bound-max",
+    "default": 0,
+    "domain": "(0,999999999)",
+    "section": "Capping options",
+    "critical": 1,
+    "description": "Maximum execution time bound for targetRunner. It must be specified when capping is enabled.",
+    "vignettes": "Maximum execution time bound for each target algorithm execution when option \u001b[4mcapping\u001b[0m is enabled."
+  },
+  {
+    "name": "boundMaxDEV",
+    "type": "r",
+    "short": "",
+    "long": "--bound-max-dev",
+    "default": 0,
+    "domain": "(0,999999999)",
+    "section": "Capping options",
+    "critical": 1,
+    "description": "Maximum execution bound for \u001b[4mtargetRunner\u001b[0m especially for training phase. It could be specified when capping is enabled.",
+    "vignettes": "Maximum execution bound for \u001b[4mtargetRunner\u001b[0m especially for training phase. It could be specified when capping is enabled and you wish to use a different runtime bound from the test phase."
+  },
+  {
+    "name": "boundDigits",
+    "type": "i",
+    "short": "",
+    "long": "--bound-digits",
+    "default": 0,
+    "domain": "(0,100)",
+    "section": "Capping options",
+    "critical": 1,
+    "description": "Precision used for calculating the execution time. It must be specified when capping is enabled.",
+    "vignettes": "Precision used for calculating the execution time. It must be specified when capping is enabled."
+  },
+  
+  
   {
     "name": "aggressiveTest",
     "type": "b",
@@ -612,51 +714,15 @@
     "vignettes": ""
   },
   {
-    "name": "capping",
-    "type": "b",
-    "short": "",
-    "long": "--capping",
-    "default": 0,
-    "section": "Adaptive capping",
-    "critical": 1,
-    "description": "Enable/disable the use of capping, a technique designed for minimizing the computation time of configurations. This is only available when elitist is active.",
-    "vignettes": "Enable/disable the use of capping, a technique designed for minimizing the computation time of configurations. This option is only available when option \u001b[4melitist\u001b[0m is activated. When enabling this option, crace provides an execution time bound to each target algorithm execution (see \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=28\u001b\\<User Guide: sec:aggres test>\u001b]8;;\u001b\\). The bound can be calculated using capping or adaptive capping. See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf#page=29\u001b\\<User Guide: sec:capping>\u001b]8;;\u001b\\ for more details. "
-  },
-  {
-    "name": "boundMax",
-    "type": "r",
-    "short": "",
-    "long": "--bound-max",
-    "default": 0,
-    "domain": "(0,999999999)",
-    "section": "Adaptive capping",
-    "critical": 1,
-    "description": "Maximum execution time bound for targetRunner. It must be specified when capping is enabled.",
-    "vignettes": "Maximum execution time bound for each target algorithm execution when option \u001b[4mcapping\u001b[0m is enabled."
-  },
-  {
-    "name": "boundMaxDEV",
-    "type": "r",
-    "short": "",
-    "long": "--bound-max-dev",
-    "default": 0,
-    "domain": "(0,999999999)",
-    "section": "Adaptive capping",
-    "critical": 1,
-    "description": "Maximum execution bound for \u001b[4mtargetRunner\u001b[0m especially for training phase. It could be specified when capping is enabled.",
-    "vignettes": "Maximum execution bound for \u001b[4mtargetRunner\u001b[0m especially for training phase. It could be specified when capping is enabled and you wish to use a different runtime bound from the test phase."
-  },
-  {
-    "name": "boundDigits",
-    "type": "i",
-    "short": "",
-    "long": "--bound-digits",
-    "default": 0,
-    "domain": "(0,100)",
-    "section": "Adaptive capping",
-    "critical": 1,
-    "description": "Precision used for calculating the execution time. It must be specified when capping is enabled.",
-    "vignettes": "Precision used for calculating the execution time. It must be specified when capping is enabled."
+     "name": "deterministic",
+     "type": "b",
+     "short": "",
+     "long": "--deterministic",
+     "default": 0,
+     "section": "Parallelization options",
+     "critical": 2,
+     "description": "If the target algorithm is deterministic, configurations will be evaluated only once per instance.",
+     "vignettes": "Enable\/disable deterministic target algorithm mode. If the target algorithm is deterministic, configurations will be evaluated only once per instance. If the number of instances provided is less than the value specified for the option \u001b[4mfirstTest\u001b[0m, no statistical test will be performed. If instances provided are all used, crace will be terminated.See \u001b]8;;https://race-autoconfig.github.io/crace/crace-package.pdf\u001b\\<User Guide: sec:training>\u001b]8;;\u001b\\ for more details."
   },
   {
     "name": "boundAsTimeout",
@@ -677,8 +743,8 @@
     "default": 0,
     "section": "Internal crace options",
     "critical": 2,
-    "description": "Randomly shuffle the training instances during the race.",
-    "vignettes": "Enable\/disable the shuffling of the training instances. If the option \\parameter{shuffleInstances} is disabled, the instances are executed in the provided or \\sampled order (see parameter{sampleInstances})."
+    "description": "Randomly shuffle used instances during the race.",
+    "vignettes": "Enable\/disable the shuffling of the used training instances. If the option \\parameter{shuffleInstances} is disabled, the instances are executed in the provided or \\sampled order (see parameter{sampleInstances})."
   },
   {
     "name": "testIterationElites",
@@ -778,7 +844,7 @@
     "short": "",
     "long": "",
     "default": "",
-    "section": "Training instances",
+    "section": "Instances",
     "domain": "",
     "critical": 4,
     "description": "",
@@ -816,7 +882,7 @@
     "long": "--elitist-new-instances",
     "default": 1,
     "domain": "(1,999999999)",
-    "section": "Elitist crace",
+    "section": "Internal crace options",
     "critical": 4,
     "description": "Number of instances added to the execution list before previous instances in elitist crace.",
     "vignettes": "Number of new instances added to each race before evaluating instances from previous races (only for elitist crace).\\begin{xwarningbox}If \\parameter{deterministic} is \\code{TRUE} then the number of \\parameter{elitistNewInstances} will be reduced or set to \\code{0} once all instances have been evaluated. \\end{xwarningbox}"
@@ -828,7 +894,7 @@
     "long": "--elitist-limit",
     "default": 2,
     "domain": "(1,999999999)",
-    "section": "Elitist crace",
+    "section": "Internal crace options",
     "critical": 4,
     "description": "In elitist crace, maximum number per race of elimination tests that do not eliminate a configuration. Use 0 for no limit.",
     "vignettes": "Maximum number of statistical tests performed without successful elimination after all instances from the previous race have been evaluated. If the limit is reached, the current race is stopped. Only valid for elitist crace. Use \\code{0} to disable the limit."
@@ -865,9 +931,9 @@
     "default": 5,
     "domain": "(1,999999999)",
     "critical": 5,
-    "vignettes": "Parameter used to define the number of configurations to be sampled and evaluated at each iteration. The number of configurations will be calculated such that there is enough budget in each race to evaluate all configurations on at least $\\mu + \\min(5,j)$ training instances, where $j$ is the index of the current iteration. The value of $\\mu$ will be adjusted to never be lower than the value of \\parameter{firstTest}. We recommend to use the default value and, if needed, adjust \\parameter{firstTest}and \\parameter{eachTest}, instead.",
     "section": "Internal crace options",
-    "description": "Parameter used to define the number of configurations sampled and evaluated at each iteration."
+    "description": "Parameter used to define the number of configurations sampled and evaluated at each iteration.",
+    "vignettes": "Parameter used to define the number of configurations to be sampled and evaluated at each iteration. The number of configurations will be calculated such that there is enough budget in each race to evaluate all configurations on at least $\\mu + \\min(5,j)$ training instances, where $j$ is the index of the current iteration. The value of $\\mu$ will be adjusted to never be lower than the value of \\parameter{firstTest}. We recommend to use the default value and, if needed, adjust \\parameter{firstTest}and \\parameter{eachTest}, instead."
   },
   {
     "name": "budgetEstimation",
@@ -1056,5 +1122,29 @@
     "critical": 5,
     "description": "Number of iterations (max) to obtain the data required to train the dependent global model, only used when model is set to dglobal or dmixed.",
     "vignettes": "Number of iterations (max)to obtain the data required to train the dependent global model,  only used when \\parameter{model} is set to \\texttt{dglobal} or \\texttt{dmixed}"
+  },
+  {
+    "name": "eliteRef",
+    "type": "i",
+    "short": "",
+    "long": "--elite-ref",
+    "default": 1,
+    "domain": "(1,100)",
+    "section": "Statistical test",
+    "critical": 4,
+    "description": "Number of elite configurations that should have a better performance when removing a configuration.",
+    "vignettes": "Specifies how many configurations should have a better performance when removing a configuration."
+  },
+  {
+    "name": "readLogsInCplot",
+    "type": "i",
+    "short": "",
+    "long": "--readlogs-in-cplot",
+    "domain": "(0,2)",    
+    "default": 0,
+    "section": "Development",
+    "critical": 7,
+    "description": "Read data from log files of previous run in plot or not.",
+    "vignettes": ""
   }
 ]

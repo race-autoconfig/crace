@@ -5,8 +5,6 @@ import random
 import collections
 import pandas as pd
 
-from random import shuffle
-
 from crace.errors import CraceError
 from crace.utils import ConditionalReturn, Reader
 
@@ -417,7 +415,7 @@ class Instances(Reader):
         """
         Shuffle instances already generated
         """
-        shuffle(self.instances)
+        random.shuffle(self.instances)
         self.instances_ids = [x.instance_id for x in self.instances]
 
     def update_config_num(self, instance_id):

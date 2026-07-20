@@ -1,6 +1,22 @@
 import re
 import pandas as pd
 
+from crace.utils.const import WIDTH
+
+_ESCAPE_RE = re.compile(r'\\([ntrfvab\\])')
+_ESCAPE_MAP = {
+    "n": "\n",
+    "t": "\t",
+    "r": "\r",
+    "f": "\f",
+    "v": "\v",
+    "a": "\a",
+    "b": "\b",
+    "\\": "\\",
+}
+
+def _decode_escape(text: str):
+    return _ESCAPE_RE.sub(lambda m: _ESCAPE_MAP[m.group(1)], text)
 
 def _strip_ansi(s: str) -> str:
     # CSI (colors, style, etc.)
@@ -19,42 +35,53 @@ def _ansi_wrap(text: str, width: int, hanging: int, space: bool):
 
     paras = text.split("\n")
 
-    for para in paras:
+    for i, para in enumerate(paras):
         if para.strip() == "":
             out.append("")
             continue
 
-        out.extend(_ansi_wrap_one_para(para, width, hanging, space))
+        out.extend(_ansi_wrap_one_para(para, width, hanging, space, i==0))
 
     return out
 
-def _ansi_wrap_one_para(text: str, width: int, hanging: int, space: bool):
+def _ansi_wrap_one_para(text: str, width: int, hanging: int, space: bool, init_line: bool):
     base_indent = ""
 
     if space:
-        n = len(text) - len(text.lstrip(" "))
-        base_indent = " " * n
-        text = text.lstrip(" ")
+        text = text.replace(r"\t", "\t").expandtabs(2)
+        m = re.match(r"^ *", text)
+        base_indent = m.group(0)
+        text = text[len(base_indent):]
 
     words = text.split()
     lines = []
     current = ""
-    first = False
+    first = True
+
+    available_width = width - len(base_indent) - hanging    # available width
+    hanging_indent = base_indent + " " * hanging
+
 
     for w in words:
-        indent = "" if first else " " * hanging
+
         test = w if not current else current + " " + w
 
-        if len(_strip_ansi(base_indent + indent + test)) > width:
-            lines.append(base_indent + indent + current)
+        if len(_strip_ansi(test)) > available_width:
+            if current:
+                if first and init_line:
+                    lines.append(base_indent + current)
+                else:
+                    lines.append(hanging_indent + current)
             current = w
             first = False
         else:
-            current = test
+            current = test 
 
     if current:
-        indent = "" if first else " " * hanging
-        lines.append(base_indent + indent + current)
+        if first and init_line:
+            lines.append(base_indent + current)
+        else:
+            lines.append(hanging_indent + current)
 
     return lines
 
@@ -99,11 +126,16 @@ def _make_ascii_list(text: str, width: int, hanging: int):
 
     return "\n".join(output)
 
-def format_string(vignettes: str, width: int = 85, hanging: int=2, space: bool=False):
+def format_string(text: str, width: int=WIDTH, hanging: int=0, space: bool=False):
     """
     - transform xwarningbox → ASCII frame
     - transform itemize → ASCII list
     - textwrap for other text
+
+    :param text: input string
+    :param width: max width of output string
+    :param hanging: hanging indent for wrapped lines
+    :param space: whether to preserve spaces and tabs at the beginning of each line
     """
     output = []
     pos = 0
@@ -112,11 +144,11 @@ def format_string(vignettes: str, width: int = 85, hanging: int=2, space: bool=F
     for match in re.finditer(
         r"(\\begin{xwarningbox}.*?\\end{xwarningbox}|"
         r"\\begin{itemize}.*?\\end{itemize})",
-        vignettes,
+        text,
         flags=re.DOTALL,
     ):
         start, end = match.span()
-        before = vignettes[pos:start]
+        before = text[pos:start]
 
         # normal text in front
         if before.strip():
@@ -137,7 +169,7 @@ def format_string(vignettes: str, width: int = 85, hanging: int=2, space: bool=F
         pos = end
 
     # normal text in the end
-    tail = vignettes[pos:]
+    tail = text[pos:]
     if tail.strip():
         output.append("\n".join(_ansi_wrap(tail, width, hanging, space)))
 
