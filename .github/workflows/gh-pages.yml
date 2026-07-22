@@ -98,6 +98,11 @@ jobs:
         run: |
           jupyter-book build docs
 
+      - name: Add Google Verification HTML
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          echo "google-site-verification: google8dc341396cd40e0e.html" > docs/_build/html/google8dc341396cd40e0e.html
+
       - name: Upload artifact
         if: steps.changes.outputs.changed == 'true'
         uses: actions/upload-pages-artifact@v3

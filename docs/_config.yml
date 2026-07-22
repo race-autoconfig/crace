@@ -34,6 +34,8 @@ sphinx:
       github_repo: crace
       github_version: main
       doc_path: docs
+      metatags: |
+        <meta name="google-site-verification" content="JOXRioKAur8pUUQhyzmuJqKs79IpGF4JPq09mDUt7W8" />
 
     html_show_sourcelink: false
 
