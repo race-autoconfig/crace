@@ -67,10 +67,10 @@ def pandas_future_ctx():
     return PandasFutureCtx()
 
 
-def truncated_normal(mean=0, sd=1, low=0, upp=10):
+def truncated_normal(mean=0, sd=1, low=0, upp=10, rng_state=None):
     #Function to use the truncated normal distribution
     a, b = (low - mean) / sd, (upp - mean) / sd
-    value = truncnorm.rvs(a=a, b=b, loc=mean, scale=sd)
+    value = truncnorm.rvs(a=a, b=b, loc=mean, scale=sd, random_state=rng_state)
     return float(value)
 
 

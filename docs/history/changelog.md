@@ -1,5 +1,57 @@
 # Changelog
 
+
+## crace 1.3
+
+### crace 1.3.0
+
+> Improvements and bug fixes on version 1.2.0
+> 
+> - docs
+>   - added keywords
+>   - updated changelog
+> 
+> - src
+>   - added numpy.random.Generator as random generator for sampling
+>   - added timestamp for testing
+>   - added option supporting for old crace version: bindcores/bindCores
+>   - renamed object 'test' to 'testing' in craceResults class
+>   - supported various ways to provide arguments when calling run() in python console
+>       - run('-h')
+>       - run(['-h'])
+>       - run('-m', 'doc')
+>       - run(['-m', 'doc'])
+>       - run('-m doc')
+>       - run('-m, doc')
+> 
+> - bug fixes
+>   - Fixed the handling of parameter `boundMaxDEV`: 
+>     the default value `0` now indicates that the parameter is unset rather than explicitly set to `0`.
+>   - Fixed the reporting of parameter `bindCores`:
+>     its value is now correctly printed when provided via the command line.
+
+
+## crace 1.2
+
+### crace 1.2.0
+
+>   Improvements and bug fixes on version 1.1.1
+>
+>   - add new utility options (doc, examples, templates, which, where, parallel) for calling crace:
+>       - improve the entry point to support calling new utility options.
+>       - improve the code for calling 'crace parallel': arguments are seperated by '--'.
+>       - 'which' and 'where' options are for opening the crace source code root directory.
+>
+>   - improve formatting of option information:
+>       - add constant parameter WIDTH for controlling the width of all help/pkg message.
+>       - improve the formatting of help message for all options.
+>
+>   - bug fixes for list options
+>
+>   - update user guide for crace options
+>
+> (Yunshuang XIAO)
+
 ## crace 1.0
 
 ### crace 1.1.1
@@ -16,6 +68,8 @@
 >
 >   - options: check scenario argument if provided by user
 >   - mpi.py: improve error handling
+>
+> (Yunshuang XIAO)
 
 ### crace 1.1.0.post0
 

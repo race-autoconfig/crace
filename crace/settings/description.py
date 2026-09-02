@@ -148,22 +148,32 @@ A BibTeX entry for LaTeX users is
 """
 
 
-_VERSION = "1.2"
+_VERSION = "1.3"
 update_logs = """
-Improvements and bug fixes on version 1.1.1
+Improvements and bug fixes on version 1.2.0
 
-- add new utility options (doc, examples, templates, which, where, parallel) for calling crace:
-    - improve the entry point to support calling new utility options.
-    - improve the code for calling 'crace parallel': arguments are seperated by '--'.
-    - 'which' and 'where' options are for opening the crace source code root directory.
+- docs
+    - added keywords
 
-- improve formatting of option information:
-    - add constant parameter WIDTH for controlling the width of all help/pkg message.
-    - improve the formatting of help message for all options.
+- src
+    - added numpy.random.Generator as random generator for sampling
+    - added timestamp for testing
+    - added option supporting for old crace version: bindcores/bindCores
+    - renamed object 'test' to 'testing' in craceResults class
+    - supported various ways to provide arguments when calling run() in python console
+        - run('-h')
+        - run(['-h'])
+        - run('-m', 'doc')
+        - run(['-m', 'doc'])
+        - run('-m doc')
+        - run('-m, doc')
 
-- bug fixes for list options
+- bug fixes
+    - Fixed the handling of parameter `boundMaxDEV`: 
+      the default value `0` now indicates that the parameter is unset rather than explicitly set to `0`.
+    - Fixed the reporting of parameter `bindCores`:
+      its value is now correctly printed when provided via the command line.
 
-- update user guide for crace options
 
 """
 

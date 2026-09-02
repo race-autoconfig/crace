@@ -51,6 +51,11 @@ Thomas Stützle [![ORCID][orcid-icon]](https://orcid.org/0000-0002-5820-0473).
   10.1016/j.orp.2016.09.002
 
 
+<!-- keywords -->
+**Keywords:** Automatic algorithm configuration, continuous racing, racing, crace, irace
+
+
+
 Introduction
 ------------
 

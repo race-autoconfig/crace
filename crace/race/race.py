@@ -95,7 +95,8 @@ class Race:
         initial_configurations: Configurations,
         instances: Instances,
         parameters: Parameters,
-        options: CraceOptions
+        options: CraceOptions,
+        rng: np.random.Generator=None,
     ):
         """
             Creates the structures used in the race. This class should be instantiated form a
@@ -209,6 +210,7 @@ class Race:
                 debug_level=self.debug_level,
                 global_model=self.options.globalModel.value,
                 onlytest=self.options.onlytest.value,
+                rng_state=rng,
             )
 
             # Get eliminator
@@ -232,6 +234,7 @@ class Race:
                 log_level=self.options.logLevel.value,
                 debug_level=self.debug_level,
                 global_model=self.options.globalModel.value,
+                rng_state=rng,
                 )
 
             # In the case there is already configurations in place
@@ -332,7 +335,7 @@ class Race:
         self.priori_bounds = {} # dict of priori bounds on selected instances for elitist configuration
         self.priori_bounds[0] = self.options.boundMax.value # List of priori bounds based on instance id
                                                             # bounds[0] is the provided boundMax
-        if self.options.boundMaxDEV.is_set():
+        if self.options.boundMaxDEV.is_set() and self.options.boundMaxDEV.value > 0:
             self.priori_bounds[0] = self.options.boundMaxDEV.value
 
         # Asyncio related
@@ -2193,7 +2196,8 @@ class RaceCheck:
         initial_configurations: Configurations,
         instances: Instances,
         parameters: Parameters,
-        options: CraceOptions
+        options: CraceOptions,
+        rng: np.random.Generator=None,
     ):
         """
             Creates the structures used in the race. This class should be instantiated form a
@@ -2255,7 +2259,9 @@ class RaceCheck:
             log_folder=self.options.logDir.value,
             log_level=self.options.logLevel.value,
             debug_level=self.options.debugLevel.value,
-            global_model=self.options.globalModel.value)
+            global_model=self.options.globalModel.value,
+            rng_state=rng,
+            )
 
         # In the case there is already configurations in place
         self.n_alive = len(self.configurations.get_alive_ids())
@@ -2301,13 +2307,18 @@ class RaceCheck:
         Starts an asynchronous race and returns a coroutine that needs to be awaited.
         :return: Configuration object containing the set of alive configurations
         """
+        print(f"#\n# Testing provided/sampled {self.configurations.n_config} configurations..")
+        for x in self.configurations.get_alive():
+            print(f"#   Configuration {x.get_id()}: {x.cmd}")
+
         if self.budget == 3:
-            print(f"# Testing target executioner {self.budget} times on a random selected training instance..\n#")
+            print(f"#\n# Testing target executioner {self.budget} times on a random selected training instance..\n#")
         else:
-            print(f"# Testing target executioner {self.budget} times..")
+            print(f"#\n# Testing target executioner {self.budget} times..")
             print(f"#  Instance 1: random selected from the training instances")
             print(f"#  Instance 2: random selected from the test instances\n#")
         self.instances.check_instances()
+
         if self.capping:
             print(f"# Set time bound for each target algorithm as 2 seconds")
             for ins in self.instances.instances:
@@ -2315,11 +2326,13 @@ class RaceCheck:
 
         # Add experiments
         for x in self.instances.instances:
+            print(f"# Adding experiments for instance {x.instance_id}: {x.path}..")   
             self._add_experiments(
                 self.configurations.get_alive(),
                 [x],
                 self.priori_bounds
             )
+        print("#")
 
         # Wait for race to finish
         await self._result_future

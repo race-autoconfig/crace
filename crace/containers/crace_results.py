@@ -230,7 +230,7 @@ class CraceResults:
         self._state = None
         self._all_elites = None
         self._training = None
-        self._test = None
+        self._testing = None
         self._summarise = None
         self._version = csd.version
 
@@ -313,12 +313,12 @@ class CraceResults:
         return self._training
 
     @_conditional_property(unblocked_list=_unblocked_properties, flag_attr="_enabled")
-    def test(self):
-        if self._test is None:
-            self._test = TestResults(options=self.options,
+    def testing(self):
+        if self._testing is None:
+            self._testing = TestResults(options=self.options,
                                      configurations=self.configurations,
                                      elites=self.elites)
-        return self._test
+        return self._testing
     
     @_conditional_property(unblocked_list=_unblocked_properties, flag_attr="_enabled")
     def summarise(self):
@@ -388,7 +388,7 @@ class TrainResults(ExperimentsData):
 class TestResults(ExperimentsData):
     def __init__(self, options: CraceOptions, configurations: Configurations, elites: list):
         """
-        load test experiments
+        load testing experiments
         """
         self._options = options
         self._configurations = configurations

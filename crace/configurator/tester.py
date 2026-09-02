@@ -3,6 +3,10 @@ import time
 import copy
 import asyncio
 import logging
+
+from datetime import datetime
+from tzlocal import get_localzone
+
 import crace.execution as execution
 
 from crace.utils import get_loop
@@ -17,7 +21,7 @@ asyncio_logger = logging.getLogger("asyncio")
 
 class Tester:
     def __init__(self, scenario: Scenario):
-        print("#\n# Initializing tester ")
+        print("#\n# {} Initializing tester ".format(datetime.now(get_localzone()).strftime('%Y-%m-%d %H:%M:%S %Z')))
         self.options = scenario.options
         self.parameters = scenario.parameters
         self.instances = scenario.instances
@@ -70,7 +74,7 @@ class Tester:
             print('# Testing is finished in previous run.')
             return
 
-        print("# Start testing ... ")
+        print("#\n# {} Start testing ".format(datetime.now(get_localzone()).strftime('%Y-%m-%d %H:%M:%S %Z')))
 
         if config is not None:
             self.configurations = config
@@ -99,6 +103,9 @@ class Tester:
         asyncio_logger.debug("do_test: ensured future")
         loop.run_until_complete(future)
         asyncio_logger.debug("do_test: future is complete")
+
+        print("#\n# {} Stopping tester ".format(datetime.now(get_localzone()).strftime('%Y-%m-%d %H:%M:%S %Z')))
+
         asyncio_logger.info(future.result())
         shutdown_future = asyncio.ensure_future(execution.stop_execution_async(self.master, self._pool))
         asyncio_logger.debug("do_test: requesting stop")

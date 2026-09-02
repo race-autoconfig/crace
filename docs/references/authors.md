@@ -18,7 +18,7 @@
 ## Citation
 
 Source:
-[`CITIATION`](./CITIATION.bib)
+[`CITIATION`](./citiation.bib)
 
 - Yunshuang Xiao, Leslie Pérez Cáceres, Manuel López-Ibáñez, and Thomas Stützle. 
    **Algorithm Configuration via Continuously Racing: Preliminary Results**(

@@ -378,8 +378,10 @@ class CraceOptions(Reader):
         # 
         can_modify = ['debugLevel', 'execDir', 'logDir', 'testNbElites']
 
+        # support different names in different crace versions
         rename = {'recoveryFile': 'recoveryDir',
-                  'logFile': 'logDir',}
+                  'logFile': 'logDir',
+                  'bindcores': 'bindCores',}
 
         info = []
         with open(log_file, newline='') as f:

@@ -42,7 +42,7 @@ class ParameterModel(ABC):
         self.is_dependent = dependent
 
     @abstractmethod
-    def sample_configuration(self, mean, domain):
+    def sample_configuration(self, mean, domain, rng_state=None):
         """
         Sample value from the model. The parameter value will be within the provided domain
 
@@ -129,7 +129,7 @@ class IntegerModel(ParameterModel):
         model.nb_variable = nb_variable
         return model
 
-    def sample_configuration(self, mean=None, domain=None):
+    def sample_configuration(self, mean=None, domain=None, rng_state=None):
         if domain is None:
             current_domain = self.domain
         else:
@@ -145,7 +145,7 @@ class IntegerModel(ParameterModel):
         lower = current_domain[0]
         upper = current_domain[1] + 1
         current_mean = current_mean + 0.5
-        sampled_value = truncated_normal(current_mean, sd=domain_std, low=lower, upp=upper)
+        sampled_value = truncated_normal(current_mean, sd=domain_std, low=lower, upp=upper, rng_state=rng_state)
         new_value = math.floor(sampled_value)
         assert (current_domain[0] <= new_value) and (new_value <= current_domain[1]), "Sampled wrong value " + \
                                                                                       str(new_value) + \
@@ -216,7 +216,7 @@ class IntegerLogModel(ParameterModel):
         model.nb_variable = nb_variable
         return model
 
-    def sample_configuration(self, mean=None, domain=None):
+    def sample_configuration(self, mean=None, domain=None, rng_state=None):
         if domain is None:
             current_domain = self.domain
         else:
@@ -237,7 +237,7 @@ class IntegerLogModel(ParameterModel):
         t_upper = math.log(upper)
 
         t_mean = self._to_log(current_mean, lower=t_lower, upper=t_upper)
-        sampled_value = truncated_normal(t_mean, sd=self.model_std, low=0, upp=1)
+        sampled_value = truncated_normal(t_mean, sd=self.model_std, low=0, upp=1, rng_state=rng_state)
         new_value = self._to_value(sampled_value, lower=t_lower, upper=t_upper)
 
         new_value = math.floor(new_value)
@@ -320,7 +320,7 @@ class ContinuousModel(ParameterModel):
         model.nb_variable = nb_variable
         return model
 
-    def sample_configuration(self, mean=None, domain=None):
+    def sample_configuration(self, mean=None, domain=None, rng_state=None):
         if domain is None:
             current_domain = self.domain
         else:
@@ -336,7 +336,7 @@ class ContinuousModel(ParameterModel):
 
         # if self.is_dependent: FIXME
         domain_std = (current_domain[1] - current_domain[0]) * self.model_std
-        sample_value = truncated_normal(current_mean, sd=domain_std, low=current_domain[0], upp=current_domain[1])
+        sample_value = truncated_normal(current_mean, sd=domain_std, low=current_domain[0], upp=current_domain[1], rng_state=rng_state)
         new_value = round(sample_value, self.digits)
         assert current_domain[0] <= new_value <= current_domain[1], "Sampled wrong value " + str(new_value) + \
                                                                     " for parameter " + self.name
@@ -408,7 +408,7 @@ class ContinuousLogModel(ParameterModel):
         model.nb_variable = nb_variable
         return model
 
-    def sample_configuration(self, mean=None, domain=None):
+    def sample_configuration(self, mean=None, domain=None, rng_state=None):
         if domain is None:
             current_domain = self.domain
         else:
@@ -425,7 +425,7 @@ class ContinuousLogModel(ParameterModel):
         t_lower = math.log(current_domain[0])
         t_upper = math.log(current_domain[1])
         t_mean = self._to_log(current_mean, lower=t_lower, upper=t_upper)
-        sampled_value = truncated_normal(t_mean, sd=self.model_std, low=0, upp=1)
+        sampled_value = truncated_normal(t_mean, sd=self.model_std, low=0, upp=1, rng_state=rng_state)
         new_value = self._to_value(sampled_value, lower=t_lower, upper=t_upper)
         new_value = round(sampled_value.rvs(), self.digits)
 
@@ -501,7 +501,7 @@ class OrdinalModel(ParameterModel):
         model.nb_variable = nb_variable
         return model
 
-    def sample_configuration(self, mean=None, domain=None):
+    def sample_configuration(self, mean=None, domain=None, rng_state=None):
         if domain is None:
             current_domain = self.domain
         else:
@@ -518,7 +518,7 @@ class OrdinalModel(ParameterModel):
         current_mean = domain.index(current_value)
 
         #FIXME check this sampling
-        sampled_value = math.floor(truncnorm(0, len(current_domain), loc=current_mean+0.5, scale=1))
+        sampled_value = math.floor(truncnorm(0, len(current_domain), loc=current_mean+0.5, scale=1), rng_state=rng_state)
         new_value = domain[sampled_value]
         return new_value
 
@@ -582,7 +582,7 @@ class CategoricalModel(ParameterModel):
         model.nb_variable = nb_variable
         return model
 
-    def sample_configuration(self, mean=None, domain=None):
+    def sample_configuration(self, mean=None, domain=None, rng_state=None):
         if domain is None:
             domain = self.domain
         if domain != self.domain:
@@ -724,9 +724,9 @@ class LocalModel:
             else:
                 raise ModelError("Error in parameter type in the log")
 
-    def sample_parameter(self, name, mean, domain=None):
+    def sample_parameter(self, name, mean, domain=None, rng_state=None):
         assert name in self.models.keys(), "Cannot find parameter model"
-        value = self.models[name].sample_configuration(domain=domain, mean=mean)
+        value = self.models[name].sample_configuration(domain=domain, mean=mean, rng_state=rng_state)
         return value
 
     def increment_sampled(self):
@@ -808,7 +808,7 @@ class ProbabilisticModel:
     :ivar size: Number of models in the object (equal to number of configurations)
     :ivar hash_models: List of LocalModel objects hashes used maninly to find repeated models.
     """
-    def __init__(self, parameters: Parameters, log_folder: str, log_level: int, debug_level: int, recovery_folder=None, read_folder=None, global_model=False):
+    def __init__(self, parameters: Parameters, log_folder: str, log_level: int, debug_level: int, recovery_folder=None, read_folder=None, global_model=False, rng_state=None):
         """
         Creates a ProbabilisticModel object
         :param parameters: Parameters object
@@ -821,6 +821,8 @@ class ProbabilisticModel:
         # self.weights = {}
         self.parameters = parameters
         self.size = 0
+
+        self.rng_state = rng_state
 
         # models hash
         self.hash_models = []
@@ -849,12 +851,12 @@ class ProbabilisticModel:
                 file.close()
 
     @staticmethod
-    def from_log(configurations: Configurations, parameters: Parameters, log_folder: str, log_level: int, debug_level: int, recovery_folder=None, read_folder=None, global_model=False, onlytest=False):
+    def from_log(configurations: Configurations, parameters: Parameters, log_folder: str, log_level: int, debug_level: int, recovery_folder=None, read_folder=None, global_model=False, onlytest=False, rng_state=None):
         if onlytest: return
         model = ProbabilisticModel(parameters=parameters, log_folder=log_folder,
                                    log_level=log_level, debug_level=debug_level,
                                    recovery_folder=recovery_folder, read_folder=read_folder,
-                                   global_model=global_model,)
+                                   global_model=global_model, rng_state=rng_state)
         rec_folder = recovery_folder if recovery_folder else read_folder
         model.add_models_from_log(rec_folder, parameters)
         if not read_folder:
@@ -990,7 +992,7 @@ class ProbabilisticModel:
         """
         return self.forbidden_expressions.is_forbidden(param_values)
 
-    def _create_sampled_configuration(self, parent_config) -> ConfigurationEntry:
+    def _create_sampled_configuration(self, parent_config, rng_state=None) -> ConfigurationEntry:
         """
         Samples a configuration from the model of the configuration parent_id.
 
@@ -1000,6 +1002,7 @@ class ProbabilisticModel:
         :return: A configuration, sampled around the configuration described by parent_ID.
         Might contain forbidden parameter combinations.
         """
+        rng_state = rng_state if rng_state is not None else self.rng_state
         new_values = {}
         for name in self.parameters.sorted_parameters:
             if self.parameters.get_parameter(name).is_active(new_values):
@@ -1008,7 +1011,7 @@ class ProbabilisticModel:
                 mean = parent_config.get_parameter_value(name)
                 parent_model = parent_config.get_model_id() if parent_config.id > 0 else 0
                 if self.global_model: parent_model = self.global_model_id
-                new_values[name] = self.models[parent_model].sample_parameter(name, mean, domain)
+                new_values[name] = self.models[parent_model].sample_parameter(name, mean, domain, rng_state)
                 if not self.parameters.get_parameter(name).check_value(new_values[name]):
                     raise ModelError(
                         "Error sampling parameter " + name + " model delivered value " + str(new_values[name]))
@@ -1019,7 +1022,7 @@ class ProbabilisticModel:
         config = ConfigurationEntry(-1, parent_config.get_id(), parent_model, new_values, cmd_line, self.parameters)
         return config
 
-    def sample_configuration(self, parent_config):
+    def sample_configuration(self, parent_config, rng_state=None) -> ConfigurationEntry:
         """
         Samples a configuration from a parent model.
         The configuration will have no ID assigned.
@@ -1028,6 +1031,7 @@ class ProbabilisticModel:
 
         :return: Configuration object (sampled from parent ID model)
         """
+        rng_state = rng_state if rng_state is not None else self.rng_state
         config = self._create_sampled_configuration(parent_config)
         tries = 100
         while (tries >= 0
@@ -1169,7 +1173,7 @@ class ProbabilisticModel:
         logger_1.info(f"# Model of configs soft restart: {[x.get_id() for x in configs]}")
 
         # FIXME: different method to restart
-        #   1. ✅ restart to specific model based on model id
+        #   1. restart to specific model based on model id
         #   2. restart each parameter model
         for config in configs:
             config.set_model_id(model_id)

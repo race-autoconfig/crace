@@ -124,25 +124,33 @@ def start_cmdline(arguments=None, console: bool=True, mpi: bool=False):
     if not console:
         if mpi: print("\nExiting crace. (Ignore the following 'MPI_ABORT' messages if appearing.)")
         sys.exit(1)
-    else: return data
+
+    return
+
+def _parse_args(*args):
+    if len(args) == 1:
+        args = args[0]
+    if isinstance(args, list):
+        outs = args
+    elif isinstance(args, str):
+        outs = re.split(r"[ ,]+", args)
+    else:
+        outs = list(args)
+    return [str(x) for x in outs]
 
 def run(*inputs):
-    if len(inputs) == 1 and isinstance(inputs[0], list):
-        arguments = inputs[0]
-    else:
-        arguments = list(inputs)
-    arguments = [str(x) for x in arguments]
-    return crace_cmdline(arguments=arguments)
+    return crace_cmdline(*inputs)
 
-def crace_cmdline(arguments: list=None, console: bool=True, cli: bool=False, mpi: bool=False):
+def crace_cmdline(*kargs, arguments: list=None, console: bool=True, cli: bool=False, mpi: bool=False):
     """
     Allowed to be called: 1. by entry point, 
                           2. by crace_mpi 
                           3. in python console
     """
-    if not isinstance(arguments, list):
-        if isinstance(arguments, str):
-            arguments = re.split(r"[ ,]+", arguments)
+    if arguments is not None:
+        arguments = _parse_args(arguments)
+    elif len(kargs) > 0:
+        arguments = _parse_args(*kargs)
 
     if cli:
         arguments = arguments

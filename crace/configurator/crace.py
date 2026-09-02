@@ -2,6 +2,8 @@ import random
 import asyncio
 import logging
 
+import numpy as np
+
 import crace.execution as execution
 from crace.utils.const import WIDTH
 from crace.race.race import Race, RaceCheck
@@ -20,13 +22,15 @@ class Crace:
         self.instances = scenario.instances
         self.initial_configurations = scenario.initial_configurations
 
-        random.seed((self.options.seed.value * 7 - 1234567) % 7654321)
+        seed = (self.options.seed.value * 7 - 1234567) % 7654321
+        random.seed(seed)
+        rng = np.random.default_rng(seed)
 
         if self.options.readLogsInCplot.value < 1: self.options.print_crace_header()
         if not self.options.readlogs.value:
             print_options(self.options, self.parameters, self.instances, full=True)
 
-        self.race = Race(self.initial_configurations, self.instances, self.parameters, self.options)
+        self.race = Race(self.initial_configurations, self.instances, self.parameters, self.options, rng=rng)
 
         # create master execution handler
         if not self.options.readlogs.value:
@@ -72,12 +76,14 @@ class Check:
         self.instances = scenario.instances
         self.initial_configurations = scenario.initial_configurations
 
-        random.seed((self.options.seed.value * 7 - 1234567) % 7654321)
+        seed = (self.options.seed.value * 7 - 1234567) % 7654321
+        random.seed(seed)
+        rng = np.random.default_rng(seed)
 
         if self.options.readLogsInCplot.value < 1: self.options.print_crace_header()
         print_options(self.options, self.parameters, self.instances, full=False)
 
-        self.race = RaceCheck(self.initial_configurations, self.instances, self.parameters, self.options)
+        self.race = RaceCheck(self.initial_configurations, self.instances, self.parameters, self.options, rng=rng)
 
         # create master execution handler
         self.master, self._pool = execution.start_execution(self.options, self.race.race_callback, self.race.experiments)

@@ -122,10 +122,8 @@ def get_binding_flag(arguments):
                 label = False
             else:
                 raise ValueError(f"Invalid value for --bind-cores: {val}")
-            del arguments[idx+1]
         else:
             raise ValueError("--bind-cores provided without value")
-        del arguments[idx]
     return label
 
 def print_affinity_info(mpi: bool, MPI=None, test=False, sel_rank=None,):
