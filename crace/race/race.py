@@ -251,12 +251,8 @@ class Race:
 
             # sample configurations based randomly
             if to_sample > 0:
-                if initial_configurations is None:
-                    configurations = self.model.sample_random_parameters(to_sample)
-                    self.configurations.add_from_model(configurations)
-                else:
-                    configurations = self.model.sample_from_random_parents(to_sample, initial_configurations)
-                    self.configurations.add_from_model(configurations)
+                configurations = self.model.sample_random_parameters(to_sample)
+                self.configurations.add_from_model(configurations)
 
             # Update number of alive elites
             self.n_alive = len(self.configurations.get_alive_ids())
@@ -1462,6 +1458,8 @@ class Race:
         task_type = TaskType.model_update if not restart else TaskType.model_restart
         task_type_str = 'update' if not restart else 'restart'
 
+        self._update_elites(experiment)
+
         model_info = ModelInfo(type=task_type_str,
                                n_all_updating=self.idx_updating,
                                idx_updating=self.idx_updating_restart,
@@ -1508,20 +1506,21 @@ class Race:
         self.c_used_budget = 0
         self.c_new_configurations = 0
 
+
     def _update_elites(self, experiments):
         """
         only elitist
         """
-        sel = self.experiments.get_ncompleted_by_configurations(self.configurations.get_alive_ids())
+        sel = self.exps_view.get_ncompleted_by_configurations(self.configurations.get_alive_ids())
         sel_ids = [k for k, v in sel.items() if v == max(sel.values())]
+
+        sel_means = self.exps_view.get_results_by_configurations(sel_ids).mean().to_dict()
+        self.best_id = [k for k,v in sorted(sel_means.items(), key=lambda x: x[1], reverse=False)][0]
+        self.mean_best = sel_means[self.best_id]
 
         self.elite_ids = self.old_elites[1:] if len(self.old_elites) > 1 else [random.choice(sel_ids)]
         self.elitist_ids = self.old_elites[1:] = self.elite_ids
         self.elite_list = {x: self.exps_view.get_ncompleted_by_configuration(x) for x in self.elite_ids}
-        self.best_id = self.elitist_ids[0]
-
-        if self.exps_view.get_ncompleted_by_configuration(self.best_id) > 0:
-            self.mean_best = float(np.array(list(self.exps_view.get_result_by_configuration(self.best_id, True).values())).mean())
 
         if not isinstance(experiments, list):
             instances=list(self.exps_view.get_result_by_configuration(experiments.configuration_id, drop_na_instances=True).keys())
@@ -2373,10 +2372,10 @@ class RaceCheck:
         else:
             self.correct += 1
 
-        print(f"# Experiment {experiment.experiment_id}\
-        configuration {experiment.configuration_id}\
-        instance {experiment.instance_id}\
-        result {solution_quality} ")
+        print("# Experiment: {:<7d} config: {:<7d} instance: {:<7d} result: {:<20f}time: {:.5f}".format(experiment.experiment_id,
+                                                                                                        experiment.configuration_id,
+                                                                                                        experiment.instance_id,
+                                                                                                        solution_quality, solution_time))
 
         self.budget -= 1
 

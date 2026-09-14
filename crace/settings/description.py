@@ -148,32 +148,15 @@ A BibTeX entry for LaTeX users is
 """
 
 
-_VERSION = "1.3"
+_VERSION = "1.4"
 update_logs = """
-Improvements and bug fixes on version 1.2.0
-
-- docs
-    - added keywords
 
 - src
-    - added numpy.random.Generator as random generator for sampling
-    - added timestamp for testing
-    - added option supporting for old crace version: bindcores/bindCores
-    - renamed object 'test' to 'testing' in craceResults class
-    - supported various ways to provide arguments when calling run() in python console
-        - run('-h')
-        - run(['-h'])
-        - run('-m', 'doc')
-        - run(['-m', 'doc'])
-        - run('-m doc')
-        - run('-m, doc')
-
-- bug fixes
-    - Fixed the handling of parameter `boundMaxDEV`: 
-      the default value `0` now indicates that the parameter is unset rather than explicitly set to `0`.
-    - Fixed the reporting of parameter `bindCores`:
-      its value is now correctly printed when provided via the command line.
-
+    - improved the policy to update elites, elitist and best configuration
+    - change the way to sample new configurations in the initialization stage:
+      - old: sampled from the initial configurations
+      - new: sampled uniformly
+    - add 'time' for rachCheck output
 
 """
 
