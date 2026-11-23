@@ -1,43 +1,6 @@
 #!/usr/bin/env python3
 import textwrap
 
-# === load description ===
-csd = {}
-with open("crace/settings/description.py") as f:
-    exec(f.read(), csd)
-
-# === extract ===
-package_name        = csd['package_name']
-authors             = csd['authors']
-maintainers         = csd['maintainers']
-maintainers_email   = csd['maintainers_email']
-contributers        = csd['contributers']
-contact             = csd['contact']
-contact_email       = csd['contact_email']
-long_description    = csd['long_description']
-description         = csd['description']
-url                 = csd['url']
-urls                = csd['urls']
-copyright           = csd['copyright']
-license             = csd['license']
-citiation           = csd['citiation']
-update_logs         = csd['update_logs']
-
-# === dependencies ===
-dependencies = [
-        "numpy>=1.19.5",
-        "pandas>=1.1.5",
-        "scipy>=1.5.4",
-        "statutils>=0.1.0",
-        "statsmodels>=0.12.2",
-        "tzlocal>=4.2",
-    ]
-opt_dependencies = {
-        'all': [
-            'mpi4py>=3.0.3'
-        ]
-    }
-
 # === formats ===
 def format_people(lst1, lst2=None, lab1=False, lab2=False):
     """
@@ -93,6 +56,42 @@ def format_urls(urls):
         out.append(f'{k} = "{v}"')
     return "\n".join(out)
 
+# === load description ===
+csd = {}
+with open("crace/settings/description.py") as f:
+    exec(f.read(), csd)
+
+# === extract ===
+package_name        = csd['package_name']
+authors             = csd['authors']
+maintainers         = csd['maintainers']
+maintainers_email   = csd['maintainers_email']
+contributers        = csd['contributers']
+contact             = csd['contact']
+contact_email       = csd['contact_email']
+long_description    = csd['long_description']
+description         = csd['description']
+url                 = csd['url']
+urls                = csd['urls']
+copyright           = csd['copyright']
+license             = csd['license']
+citiation           = csd['citiation']
+update_logs         = csd['update_logs']
+
+# === dependencies ===
+dependencies = [
+        "numpy>=1.19.5",
+        "pandas>=1.1.5",
+        "scipy>=1.5.4",
+        "statutils>=0.1.0",
+        "statsmodels>=0.12.2",
+        "tzlocal>=4.2",
+    ]
+opt_dependencies = {
+        'all': [
+            'mpi4py>=3.0.3'
+        ]
+    }
 
 # === block ===
 authors_block = format_people(lst1=authors, lab2=True)

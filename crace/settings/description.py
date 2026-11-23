@@ -119,7 +119,12 @@ urls = {
     'Tracker': url_tracker,
 }
 
-copyright = f"Copyright (c) {datetime.now().year}"
+_year = datetime.now().year
+copyright = (
+    f"Copyright (c) 2026-{_year} crace developers"
+    if _year > 2026
+    else "Copyright (c) 2026 crace developers"
+)
 
 license = """
 This is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.

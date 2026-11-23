@@ -7,12 +7,10 @@ import json
 import shutil
 import random
 import textwrap
-import importlib
 import pandas as pd
 
-import crace.settings.description as csd
 from crace.utils.const import bold, underline, reset, WIDTH
-from crace.utils import Reader, ConditionalReturn, get_logger, format_string
+from crace.utils import Reader, ConditionalReturn, get_logger, format_string, print_crace_header
 from crace.errors import OptionError, FileError, ExitError
 from crace.containers.crace_option import IntegerOption, RealOption, StringOption, BooleanOption, FileOption, \
     ExeOption, EnablerOption, ListOption
@@ -170,16 +168,6 @@ class CraceOptions(Reader):
             self.print_help_short()
             raise ExitError("")
 
-        # check for version command
-        if self.version.short in arguments:
-            self.print_version_short()
-            raise ExitError("")
-
-        # check for version command
-        if self.version.long in arguments:
-            self.print_version_long()
-            raise ExitError("")
-
         # check for selected option
         if self.man.long in arguments or self.man.short in arguments:
             if self.man.long in arguments:
@@ -195,12 +183,6 @@ class CraceOptions(Reader):
 
             else:
                 raise OptionError(f"One option shoud be provided for man.")
-            raise ExitError("")
-
-        # copy templates from crace
-        if self.initialize.long in arguments:
-            print("# Arguments: {}".format(self.arguments))
-            self.copy_templates()
             raise ExitError("")
 
         # specific option called in craceplot
@@ -588,7 +570,7 @@ class CraceOptions(Reader):
         return getattr(self, option_name)
 
     def print_help_long(self):
-        self.print_crace_header()
+        print_crace_header()
 
         package_dir= os.path.dirname(os.path.dirname(__file__))
         filename = package_dir + "/settings/crace_options.json"
@@ -633,7 +615,7 @@ class CraceOptions(Reader):
 
     def print_help_short(self):
 
-        self.print_crace_header()
+        print_crace_header()
 
         package_dir= os.path.dirname(os.path.dirname(__file__))
         filename = package_dir + "/settings/crace_options.json"
@@ -690,13 +672,6 @@ class CraceOptions(Reader):
             print(f"{bold}Default:{reset} None")
         print(f"""\n{format_string(f"{bold}Description:{reset} {o.description}", hanging=0)}\n""")
         print(f"""{format_string(f"{bold}Vignettes:{reset} {o.vignettes}", hanging=0, space=True)}""")
-
-    def print_version_long(self):
-        self.print_crace_header()
-        self.print_cite_info()
-
-    def print_version_short(self):
-        print(f"{csd.package_name} {csd.version}")
 
     def print_all(self):
         """
@@ -768,67 +743,3 @@ class CraceOptions(Reader):
         for entry in os.scandir(path_src):
             if entry.is_dir() != True:
                 shutil.copy(entry.path, path_dst)
-
-    def copy_templates(self):
-        """
-        Initialize the tuning directory with template config files. 
-        Two scenarios and some script files are copied to current folder.
-        """
-        dest = os.getcwd()
-
-        spec = importlib.util.find_spec('crace')
-        if spec is None or spec.origin is None:
-            raise FileNotFoundError(f"! Error: Package {'crace'} is not installed.")
-        package_path = os.path.dirname(spec.origin)
-
-        source = os.path.join(package_path, 'inst/templates')
-
-        if not os.path.exists(source):
-            raise FileNotFoundError(f"! Error: The file {source} does not exist in the package {'crace'}.")
-
-        destination = os.path.join(dest, 'templates')
-
-        # check if destination already exists
-        if os.path.exists(destination):
-            ans = input(
-                f"! WARNING: destination directory already exists:\n"
-                f"!   {destination}\n"
-                f"! Overwrite existing files? [Y/n]: "
-            ).strip().lower()
-
-            # default
-            if ans not in ("", "y", "yes"):
-                print("! Copy aborted.")
-                return
-
-        shutil.copytree(source, destination, dirs_exist_ok=True)
-        print(f"# Copied templates from package {bold}crace{reset} to {destination}")
-
-    def print_crace_header(self):
-        print(f"#{f'':-^{WIDTH-1}}")
-        print(f'# {csd.description}')
-        print(f'# Version: {csd.version}')
-        print(f'# {csd.copyright}')
-        print('#')
-        print('# Authors: ')
-        for x in csd.authors: print(f'#   {x}')
-        print('#')
-        print('# Contributors: ')
-        for x in csd.contributers: print(f'#   {x}')
-        print('#')
-        print(f'# Contact:\n#   {csd.contact} ({csd.contact_email})')
-        print('#')
-        print(f'# Check more details at {csd.url} ')
-        line = format_string(csd.license, hanging=0, space=True)
-        print("\n".join(f"# {line}" for line in line.splitlines()))
-        print('#')
-        current_file = os.path.normpath(__file__)
-        CRACE_HOME = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
-        print(f'# installed at: {CRACE_HOME}')
-        if self.arguments: print(f'# called with: {" ".join(self.arguments)}')
-        print(f"#{f'':-^{WIDTH-1}}")
-
-    def print_cite_info(self):
-        cit = format_string(csd.citiation, width=WIDTH, hanging=0, space=True)
-        print("\n".join(f"# {line}" for line in cit.splitlines()))
-        print(f"#{f'':-^{WIDTH-1}}")

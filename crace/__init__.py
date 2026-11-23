@@ -43,10 +43,7 @@ def __getattr__(name: str):
         if name == 'doc':
             return getattr(module, 'crace_guide')
         if name in ("examples", "templates", "which", "where"):
-            func = getattr(module, 'crace_examples')
-            def wrapper():
-                return func(name)
-            return wrapper
+            return getattr(module, 'crace_examples')(name)
         return getattr(module, name)
 
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")

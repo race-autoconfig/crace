@@ -108,7 +108,7 @@ def crace_guide():
         sys.exit(1)
 
 def crace_examples(destname):
-    import os, sys
+    import sys
     import pathlib
     import platform
     import subprocess
@@ -119,48 +119,65 @@ def crace_examples(destname):
     except:
         dir_crace = pathlib.Path(__file__).resolve().parent.parent
 
-    if destname in ("which", "where"):
+    if destname in ("which", "where", "path", "whereami"):
         destpath = pathlib.Path(dir_crace)
         print(destpath)
     else:
         destpath = pathlib.Path(dir_crace / 'inst/' / destname)
         print(destpath)
 
-    # not support system without GUI
-    system = platform.system()
-    if destpath.exists():
-        if system == "Darwin":  # macOS
-            subprocess.run(["open", destpath])
-        elif system == "Windows":
-            subprocess.run(["explorer", destpath])
-        else:  # Linux
-            subprocess.run(["xdg-open", destpath])
-    else:
-        sys.exit(1)
+    try:
+        # not support system without GUI
+        system = platform.system()
+        if destpath.exists():
+            if system == "Darwin":  # macOS
+                subprocess.run(["open", destpath], check=True,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            elif system == "Windows":
+                subprocess.run(["explorer", destpath], check=True,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            else:  # Linux
+                subprocess.run(["xdg-open", destpath], check=True,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            sys.exit(1)
+    except Exception:
+        pass
 
 def crace_run():
     import sys
 
-    from crace.scripts.main import crace_cmdline
-    from crace.scripts.parallel import crace_parallel
-
     if len(sys.argv) > 1:
 
-        if sys.argv[1] == "doc":
+        if sys.argv[1] in ("doc", "guide"):
             crace_guide()
             return
 
-        if sys.argv[1].lower() in ("examples", "templates", "which", "where"):
+        if sys.argv[1].lower() in ("examples", "templates", "which", "where", "path", "whereami"):
             crace_examples(sys.argv[1].lower())
             return
 
-        # if sys.argv[1] == "mpi":
-        #     crace_mpi(args=sys.argv[2:], cli=True)
-        #     return
-
         if sys.argv[1] == "parallel":
+            from crace.scripts.parallel import crace_parallel
             crace_parallel(sys.argv[2:])
             return
 
+        if (any(arg.lower() == "--version" for arg in sys.argv[1:])
+            or sys.argv[1].lower() in ("version", "info", "about")):
+            from crace.utils.helper import print_version_long
+            print_version_long()
+            return
+
+        if any(arg.lower() == '-v' for arg in sys.argv[1:]):
+            from crace.utils.helper import print_version_short
+            print_version_short()
+            return
+
+        if any(arg.lower() == '--init' for arg in sys.argv[1:]):
+            from crace.utils.helper import copy_templates
+            copy_templates()
+            return
+
+    from crace.scripts.main import crace_cmdline
     crace_cmdline(arguments=sys.argv[1:], console=False)
 

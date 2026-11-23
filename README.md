@@ -1,5 +1,6 @@
 **crace**: Continuous Racing for Automatic Algorithm Configuration
-=============================================================
+==================================================================
+
 
 <!-- badge start -->
 [![PyPI](https://img.shields.io/pypi/v/crace?cacheSeconds=3600)][crace-pycode]
@@ -56,8 +57,8 @@ Thomas Stützle [![ORCID][orcid-icon]](https://orcid.org/0000-0002-5820-0473).
 
 
 
-Introduction
-------------
+# Introduction
+
 
 The crace package implements a continuously racing procedure, which is an alternative to 
 irace that performs in each iteration a single race.  The continuously racing configurator 
@@ -70,7 +71,7 @@ other types of algorithms when performance depends on the used parameter setting
 upon the **race** package by Birattari and **irace** package by López-Ibáñez and it is 
 implemented in Python. 
 
-You may also find the [**cplot**](https://race-autoconfig.github.io/cplot) package useful 
+You may also find the [**craceplot**](https://race-autoconfig.github.io/craceplot/) package useful 
 for analyzing the output of crace.
 
 **Keywords:** automatic algorithm configuration, automatic algorithm design, offline tuning, 
@@ -93,8 +94,8 @@ Individual examples may require additional software.
 ## User guide
 
 A complete [user guide][user-guide] comes with the package. You can access it 
-online or, after installing the crace package, invoking from the terminal console the 
-following command:
+online or, after installing the crace package, invoking from the terminal console 
+using the following command:
 ``` bash
 crace doc
 ```
@@ -102,8 +103,7 @@ crace doc
 The following is a quick-start guide. The user guide gives more detailed instructions.
 
 
-Quick Start
------------
+# Quick Start
 
 -  Install Python (with your favourite package manager, and see more details below).
 -  Install crace. The crace package can be installed automatically with conda, with pip 
@@ -293,9 +293,9 @@ activating a virtual environment. There’s no need to create a new virtual envi
 If the previous installation instructions fail because of insufficient permissions and you do 
 not have sufficient admin rights to install crace system-wide, then you need to force a local 
 installation. From the crace package [PyPI website][crace-pycode], search and download 
-one of the three versions available depending on your operating system:
+one of the two available versions depending on your operating system:
 
-- `crace_xxx.tar.gz` (Unix/Linux/BSD/macOS)
+- `crace-xxx.tar.gz` (Unix/Linux/BSD/macOS)
 - `crace-xxx-py3-none-any.whl` (python3, any platform)
 
 Alternatively, you can use wget or curl from the command line to download the file: 
@@ -306,7 +306,7 @@ wget https://files.pythonhosted.org/packages/source/c/crace/crace-xxx.tar.gz
 wget https://github.com/race-autoconfig/crace/
 ```
 
-To install the package on GNU/Linux, macOS or Windows using the formats .tar.gz, .tar or .zip, 
+To install the package on GNU/Linux, macOS or Windows using the formats .tar.gz, 
 you should first extract the source files and then navigate to the directory containing the 
 extracted files and run the following command to install the package: 
 
@@ -391,8 +391,8 @@ crace.run("--help")
 ```
 
 
-Usage
------
+## Usage
+
 
 1.  Create a directory for storing the tuning scenario setup (Bash shell):
 
@@ -441,7 +441,7 @@ Usage
 See the output of `crace --help` for additional available crace parameters. 
 Command-line parameters override the scenario setup specified in the `scenario.txt` file.
 
-## Many tuning runs in parallel
+### Many tuning runs in parallel
 
 On GNU/Linux or macOS, several repetitions of crace in parallel is allowed. 
 Call the program `crace parallel` from the Bash shell:
@@ -459,7 +459,7 @@ scratch, deleting them first if they already exist.
 
 Check the help of `crace parallel` by running it without parameters.
 
-## Parallelize one tuning
+### Parallelize one tuning
 
 A single run of crace can be done much faster by executing the calls to
 `targetRunner` (the runs of the algorithm being tuned) in parallel:
@@ -471,8 +471,10 @@ crace --parallel N
 where N is the number of slaves to execute the target algorighm in parallel.
 See the [user guide][user-guide] for more details.
 
-License
--------
+
+
+# License
+
 
 The crace package is Copyright © 2026 and distributed under the [GNU 
 General Public License version 3.0](http://www.gnu.org/licenses/gpl-3.0.en.html).
@@ -506,11 +508,10 @@ package](https://CRAN.R-project.org/package=irace) is Copyright (C) 2010-2025
 Manuel Lopez-Ibanez, Jeremie Dubois-Lacoste, Leslie Perez Caceres.
 
 
-Frequently Asked Questions
---------------------------
+# Frequently Asked Questions
 
-The [user guide][user-guide] contains
-a list of frequently asked questions.
+
+The [user guide][user-guide] contains a list of frequently asked questions.
 
 
 [user-guide]: https://race-autoconfig.github.io/crace/crace-package.pdf

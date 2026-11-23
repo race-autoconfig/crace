@@ -1,5 +1,20 @@
 # Changelog
 
+## crace 1.4
+
+### crace 1.4.1
+> - src
+>   - improve the code and structure for functions before racing
+>       - utility options: version, doc, guide, examples, templates, info, about, which, where, whereami, path
+
+### crace 1.4.0
+
+> - src
+>   - improved the policy to update elites, elitist and best configuration
+>   - change the way to sample new configurations in the initialization stage:
+>       - old: sampled from the initial configurations
+>       - new: sampled uniformly
+>       - add 'time' for raceCheck output
 
 ## crace 1.3
 

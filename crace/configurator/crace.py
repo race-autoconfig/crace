@@ -12,6 +12,8 @@ from crace.containers.instances import Instances
 from crace.containers.parameters import Parameters
 from crace.containers.crace_options import CraceOptions
 
+from crace.utils import print_crace_header
+
 asyncio_logger = logging.getLogger("asyncio")
 
 
@@ -26,7 +28,7 @@ class Crace:
         random.seed(seed)
         rng = np.random.default_rng(seed)
 
-        if self.options.readLogsInCplot.value < 1: self.options.print_crace_header()
+        if self.options.readLogsInCplot.value < 1: print_crace_header()
         if not self.options.readlogs.value:
             print_options(self.options, self.parameters, self.instances, full=True)
 
@@ -80,7 +82,7 @@ class Check:
         random.seed(seed)
         rng = np.random.default_rng(seed)
 
-        if self.options.readLogsInCplot.value < 1: self.options.print_crace_header()
+        if self.options.readLogsInCplot.value < 1: print_crace_header()
         print_options(self.options, self.parameters, self.instances, full=False)
 
         self.race = RaceCheck(self.initial_configurations, self.instances, self.parameters, self.options, rng=rng)

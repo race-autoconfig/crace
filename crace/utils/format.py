@@ -178,7 +178,9 @@ def format_string(text: str, width: int=WIDTH, hanging: int=0, space: bool=False
 
 class ConditionalReturn:
     def __init__(self, **kwargs):
-        self.kwargs = kwargs if len(kwargs) != 0 else None
+        self.kwargs = kwargs or None
+        if kwargs:
+            [setattr(self, k, v) for k, v in kwargs.items()]
 
     def __repr__(self):
         if self.kwargs:

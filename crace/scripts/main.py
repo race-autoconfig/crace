@@ -5,7 +5,7 @@ import inspect
 import logging
 import traceback
 
-current_file = os.path.normpath(__file__)
+current_file = os.path.abspath(__file__)
 CRACE_HOME = os.path.dirname(os.path.dirname(os.path.dirname(current_file)))
 if CRACE_HOME not in map(os.path.abspath, sys.path):
     sys.path.insert(0, os.path.abspath(CRACE_HOME))
@@ -139,6 +139,12 @@ def _parse_args(*args):
     return [str(x) for x in outs]
 
 def run(*inputs):
+    """
+    Allowed to be called only in python console
+
+    inputs: could be a list of arguments or a string of arguments, e.g. ['-l', 'path_to_logs'] or '-l path_to_logs'
+            could include unility commands, e.g. ['doc'], ['examples'], ['which'], ['where']
+    """
     return crace_cmdline(*inputs)
 
 def crace_cmdline(*kargs, arguments: list=None, console: bool=True, cli: bool=False, mpi: bool=False):
@@ -171,6 +177,5 @@ if __name__ == '__main__':
     """
     Allowed to be called only by this file
     """
-    from crace.scripts.utils import crace_run   
-
+    from utils import crace_run   
     crace_run()

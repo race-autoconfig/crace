@@ -9,6 +9,7 @@ from crace.elimination_tests import UniteTest, Eliminator
 from .reader import Reader
 from .format import format_string, ConditionalReturn
 from .logger import setup_logger, setup_race_loggers, get_logger
+from .helper import *
 
 
 class NpEncoder(json.JSONEncoder):

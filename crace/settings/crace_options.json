@@ -60,6 +60,17 @@
     "vignettes": "Open the user guide of crace. This command must be the first argument."
   },
   {
+    "name": ".guide",
+    "type": "e",
+    "short": "",
+    "long": "guide",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open the user guide. This command must be the first argument.",
+    "vignettes": "Open the user guide of crace. This command must be the first argument."
+  },
+  {
     "name": ".examples",
     "type": "e",
     "short": "",
@@ -82,6 +93,28 @@
     "vignettes": "Open templates folder. This command must be the first argument."
   },
   {
+    "name": ".info",
+    "type": "e",
+    "short": "",
+    "long": "info",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Print crace information. This command must be the first argument.",
+    "vignettes": "Print crace information. This command must be the first argument."
+  },
+  {
+    "name": ".about",
+    "type": "e",
+    "short": "",
+    "long": "about",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Print crace information. This command must be the first argument.",
+    "vignettes": "Print crace information. This command must be the first argument."
+  },
+  {
     "name": ".which",
     "type": "e",
     "short": "",
@@ -97,6 +130,28 @@
     "type": "e",
     "short": "",
     "long": "where",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open crace root folder. This command must be the first argument.",
+    "vignettes": "Open crace root folder. This command must be the first argument."
+  },
+  {
+    "name": ".whereami",
+    "type": "e",
+    "short": "",
+    "long": "whereami",
+    "default": null,
+    "section": "Utility options",
+    "critical": -1,
+    "description": "Open crace root folder. This command must be the first argument.",
+    "vignettes": "Open crace root folder. This command must be the first argument."
+  },
+  {
+    "name": ".path",
+    "type": "e",
+    "short": "",
+    "long": "path",
     "default": null,
     "section": "Utility options",
     "critical": -1,
